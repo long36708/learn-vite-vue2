@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "clean": "rimraf ./node_modules/.vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
     "test:unit": "vitest --environment jsdom",
     "build-only": "vite build",
+    "build:analyze": "vite build --mode analyze",
+    "build:clean": "rimraf dist",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
@@ -17,6 +20,8 @@
     "xgplayer": "^3.0.20"
   },
   "devDependencies": {
+    "rimraf": "^5.0.5",
+    "rollup-plugin-visualizer": "^5.11.0",
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/jsdom": "^16.2.14",
     "@types/node": "^16.11.45",
