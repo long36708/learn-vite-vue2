@@ -1,9 +1,19 @@
 <template>
-  <button @click="increment">Count is: {{ count }}</button>
+  <div>
+    <button @click="increment">Count is: {{ count }}</button>
+    <img :src="logoSvg" />
+    <DocumentationIcon />
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+
+// 引入SVG作为图片示例
+import logoSvg from "@/assets/logo.svg";
+
+// 将SVG作为图标组件使用
+import DocumentationIcon from "@/components/icons/IconDocumentation.vue";
 
 // 响应式状态
 const count = ref(0);
@@ -16,5 +26,6 @@ function increment() {
 // 生命周期钩子
 onMounted(() => {
   console.log(`The initial count is ${count.value}.`);
+  document.title = import.meta.env.VITE_APP_TITLE;
 });
 </script>

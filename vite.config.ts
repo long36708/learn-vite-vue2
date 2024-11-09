@@ -27,6 +27,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
       // https://github.com/vbenjs/vite-plugin-compression
       // viteCompression(),
     ],
+    optimizeDeps: {
+      exclude: ["vue-demi"],
+    },
     resolve: {
       // https://vitejs.dev/config/shared-options.html#resolve-alias
       alias: {
