@@ -5,6 +5,9 @@ import legacy from "@vitejs/plugin-legacy";
 import vue2 from "@vitejs/plugin-vue2";
 import vue2Jsx from "@vitejs/plugin-vue2-jsx";
 import { visualizer } from "rollup-plugin-visualizer";
+import requireTransform from "vite-plugin-require-transform";
+import { viteCommonjs, esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
+
 /**
  * Vite Configure
  *
@@ -14,6 +17,22 @@ export default defineConfig(({ command, mode }): UserConfig => {
   const config: UserConfig = {
     // https://vitejs.dev/config/shared-options.html#base
     base: "./",
+    server: {
+      host: "0.0.0.0",
+      // 指定服务器应该监听哪个IP 地址
+      port: 8082, // 端口号
+      open: true, // 是否自动打开浏览器
+      strictPort: false, // 当true时，若端口被占用，则会直接退出
+      https: false, // 是否启用 TLS + HTTP/2
+      proxy: {
+        // 配置自定义代理规则
+        "/api": {
+          target: "http://jsonplaceholder.typicode.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        },
+      },
+    },
     plugins: [
       // Vue2
       // https://github.com/vitejs/vite-plugin-vue2
@@ -26,9 +45,14 @@ export default defineConfig(({ command, mode }): UserConfig => {
       // compress assets
       // https://github.com/vbenjs/vite-plugin-compression
       // viteCompression(),
+      viteCommonjs(),
+      requireTransform({ fileRegex: /.ts$|.vue$|.png$|.tsx$|.jpg$/ }),
     ],
     optimizeDeps: {
       exclude: ["vue-demi"],
+      esbuildOptions: {
+        plugins: [esbuildCommonjs(["react-calendar", "react-date-picker"])],
+      },
     },
     resolve: {
       // https://vitejs.dev/config/shared-options.html#resolve-alias
