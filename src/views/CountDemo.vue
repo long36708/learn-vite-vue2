@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 // 引入SVG作为图片示例
 import logoSvg from "@/assets/logo.svg";
