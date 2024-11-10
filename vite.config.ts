@@ -54,13 +54,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
               "vue",
               "vue-router",
               "vue-router/composables",
-              "vuex",
+              // "vuex",
               // 'vuex-persist',
-              // 'deepmerge',
-              // "@logue/vue2-helpers",
-              // "@logue/vue2-helpers/teleport",
-              // "@logue/vue2-helpers/vue-router",
-              // "@logue/vue2-helpers/vuex",
+              // 'deepmerge'
             ],
           },
           plugins: [
