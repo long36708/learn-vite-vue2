@@ -2,7 +2,7 @@
   "name": "learn-vite-vue2",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "clean": "rimraf ./node_modules/.vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
@@ -17,6 +17,8 @@
     "pinia": "^2.0.16",
     "vue": "^2.7.7",
     "vue-router": "^3.5.4",
+    "@logue/vue2-helpers": "^2.2.2",
+    "vue-demi": "latest",
     "xgplayer": "^3.0.20"
   },
   "devDependencies": {
