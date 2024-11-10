@@ -78,6 +78,10 @@ export default defineConfig(({ command, mode }): UserConfig => {
         },
       },
     },
+    esbuild: {
+      // Drop console when production build.
+      drop: command === "serve" ? [] : ["console"],
+    },
   };
   return config;
 });
