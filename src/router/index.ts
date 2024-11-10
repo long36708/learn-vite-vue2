@@ -53,6 +53,14 @@ const router = new VueRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("@/views/TeleportDemo"),
     },
+    {
+      path: "/bin",
+      name: "BinUIDemo",
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import("@/views/BinUIDemo"),
+    },
   ],
 });
 
