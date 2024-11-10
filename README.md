@@ -61,3 +61,15 @@ pnpm run lint
 ```shell
 npm create vue@legacy
 ```
+
+## Troubleshooting 故障排除
+
+When adding or deleting files, an error may occur and even if the error is corrected, it may not be reflected in
+devserver.
+
+在添加或删除文件时，可能会出现错误，即使错误得到纠正，也可能不会在devserver中反映出来。
+
+In that case, stop devserver and delete all the files in the `node_modules/.vite` directory. You can also run it with
+the `clean` command.
+
+在这种情况下，请停止devserver并删除node_modules目录下的所有文件。轻快地”目录。您也可以使用‘ clean ’命令运行它.
