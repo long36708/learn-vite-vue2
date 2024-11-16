@@ -7,6 +7,7 @@ import vue2Jsx from "@vitejs/plugin-vue2-jsx";
 import { visualizer } from "rollup-plugin-visualizer";
 import requireTransform from "vite-plugin-require-transform";
 import { viteCommonjs, esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
+import UnpluginSvgComponent from "unplugin-svg-component/vite";
 
 /**
  * Vite Configure
@@ -29,7 +30,15 @@ export default defineConfig(({ command, mode }): UserConfig => {
         "/api": {
           target: "http://jsonplaceholder.typicode.com",
           changeOrigin: true,
+          cors: true, // 允许跨域
           rewrite: (path) => path.replace(/^\/api/, ""),
+          configure: (proxy, options) => {
+            // 配置此项可在响应头中看到请求的真实地址
+            proxy.on("proxyRes", (proxyRes, req) => {
+              proxyRes.headers["x-real-url"] =
+                new URL(req.url || "", options.target as string)?.href || "";
+            });
+          },
         },
       },
     },
@@ -45,6 +54,13 @@ export default defineConfig(({ command, mode }): UserConfig => {
       // compress assets
       // https://github.com/vbenjs/vite-plugin-compression
       // viteCompression(),
+      UnpluginSvgComponent({
+        iconDir: "src/assets/svgIlcons",
+        dts: true,
+        dtsDir: "src/types",
+        // componentStyle:
+        //   "width: 1em; height: 1em; fill:currentColor; scale: 1.2",
+      }),
       viteCommonjs(),
       requireTransform({ fileRegex: /.ts$|.vue$|.png$|.tsx$|.jpg$/ }),
     ],

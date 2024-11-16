@@ -2,7 +2,8 @@
 import { ref, computed } from "vue";
 import { useFetch } from "@/hooks/useFetch";
 
-const baseUrl = "https://jsonplaceholder.typicode.com/todos/";
+// const baseUrl = "https://jsonplaceholder.typicode.com/todos/";
+const baseUrl = "/api/todos/";
 const id = ref("1");
 const url = computed(() => baseUrl + id.value);
 

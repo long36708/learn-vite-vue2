@@ -5,5 +5,6 @@ import TheWelcome from "@/components/TheWelcome.vue";
 <template>
   <main>
     <TheWelcome />
+    <SvgIcon name="neon-cat" />
   </main>
 </template>
