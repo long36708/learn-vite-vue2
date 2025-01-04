@@ -11,6 +11,7 @@
 		"types/svg-component.d.ts",
 		"types/vg-component-global.d.ts",
 		"unplugin-vue-router/client",
+		"@histoire/client"
 	],
 	"exclude": [
 		"src/**/__tests__/*",
