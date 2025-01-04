@@ -7,20 +7,20 @@
 declare module '~virtual/svg-component' {
   const SvgIcon: import("vue").DefineComponent<{
       name: {
-          type: import("vue").PropType<"">;
+          type: import("vue").PropType<"colorfull/neon-cat">;
           default: string;
           required: true;
       };
   }, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").VNodeProps & import("vue").AllowedComponentProps & import("vue").ComponentCustomProps, Readonly<import("vue").ExtractPropTypes<{
       name: {
-          type: import("vue").PropType<"">;
+          type: import("vue").PropType<"colorfull/neon-cat">;
           default: string;
           required: true;
       };
   }>>, {
-      name: "";
+      name: "colorfull/neon-cat";
   }>;
-  export const svgNames: [""];
-  export type SvgName = "";
+  export const svgNames: ["colorfull/neon-cat"];
+  export type SvgName = "colorfull/neon-cat";
   export default SvgIcon;
 }

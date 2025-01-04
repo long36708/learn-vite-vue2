@@ -1,6 +1,6 @@
 # learn-vite-vue2
 
-这个模板应该可以帮助您开始在Vite中使用Vue 3进行开发。
+这个模板应该可以帮助您开始在Vite中使用Vue 2进行开发。
 
 ## Recommended IDE Setup
 
@@ -65,11 +65,12 @@ npm create vue@legacy
 ## Troubleshooting 故障排除
 
 When adding or deleting files, an error may occur and even if the error is corrected, it may not be reflected in
-devserver.
+devServer.
 
-在添加或删除文件时，可能会出现错误，即使错误得到纠正，也可能不会在devserver中反映出来。
+在添加或删除文件时，可能会出现错误，即使错误得到纠正，也可能不会在devServer中反映出来。
 
-In that case, stop devserver and delete all the files in the `node_modules/.vite` directory. You can also run it with
+In that case, stop devServer and delete all the files in the `node_modules/.vite` directory. You can also run it with
 the `clean` command.
 
-在这种情况下，请停止devserver并删除node_modules目录下的所有文件。轻快地”目录。您也可以使用‘ clean ’命令运行它.
+在这种情况下，请停止devServer并删除node_modules目录下的`.vite`中的所有文件”目录。
+您也可以使用`clean`命令运行它.

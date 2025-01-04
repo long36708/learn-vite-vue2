@@ -1,5 +1,5 @@
 <script setup>
-import { useMouse } from "@/hooks/useMouse";
+import { useMouse } from "@/composables/useMouse";
 
 const { x, y } = useMouse();
 </script>

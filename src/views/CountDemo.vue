@@ -2,6 +2,7 @@
   <div>
     <button @click="increment">Count is: {{ count }}</button>
     <img :src="logoSvg" />
+    <SvgIcon name="colorfull/neon-cat" />
     <DocumentationIcon />
   </div>
 </template>

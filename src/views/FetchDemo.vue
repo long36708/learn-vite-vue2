@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useFetch } from "@/hooks/useFetch";
+import { useFetch } from "@/composables/useFetch";
 
 // const baseUrl = "https://jsonplaceholder.typicode.com/todos/";
 const baseUrl = "/api/todos/";

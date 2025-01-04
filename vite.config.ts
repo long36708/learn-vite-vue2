@@ -1,13 +1,14 @@
-import { fileURLToPath, URL } from "node:url";
-
+import { fileURLToPath, URL, resolve } from "node:url";
 import { defineConfig, type UserConfig } from "vite";
 import legacy from "@vitejs/plugin-legacy";
 import vue2 from "@vitejs/plugin-vue2";
 import vue2Jsx from "@vitejs/plugin-vue2-jsx";
 import { visualizer } from "rollup-plugin-visualizer";
 import requireTransform from "vite-plugin-require-transform";
-import { viteCommonjs, esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
+import { esbuildCommonjs, viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import UnpluginSvgComponent from "unplugin-svg-component/vite";
+import { codeInspectorPlugin } from "code-inspector-plugin";
+import TurboConsole from "unplugin-turbo-console/vite";
 
 /**
  * Vite Configure
@@ -15,7 +16,42 @@ import UnpluginSvgComponent from "unplugin-svg-component/vite";
  * @see {@link https://vitejs.dev/config/}
  */
 export default defineConfig(({ command, mode }): UserConfig => {
-  const config: UserConfig = {
+  const config: {
+    server: {
+      proxy: {
+        "/api": {
+          cors: boolean;
+          changeOrigin: boolean;
+          configure: (proxy, options) => void;
+          rewrite: (path) => string;
+          target: string;
+        };
+      };
+      port: number;
+      strictPort: boolean;
+      host: string;
+      https: boolean;
+      open: boolean;
+    };
+    resolve: { extensions: string[]; alias: { "@": string; "~": string } };
+    build: {
+      minify: string;
+      rollupOptions: {
+        output: {
+          manualChunks: { vue: string[] };
+          plugins: (Plugin | undefined)[];
+        };
+      };
+      target: string;
+    };
+    plugins: any[];
+    optimizeDeps: {
+      esbuildOptions: { plugins: { name: string; setup(build: any): void }[] };
+      exclude: string[];
+    };
+    esbuild: { drop: string[] };
+    base: string;
+  } = {
     // https://vitejs.dev/config/shared-options.html#base
     base: "./",
     server: {
@@ -55,11 +91,19 @@ export default defineConfig(({ command, mode }): UserConfig => {
       // https://github.com/vbenjs/vite-plugin-compression
       // viteCompression(),
       UnpluginSvgComponent({
-        iconDir: "src/assets/svgIlcons",
+        iconDir: "src/assets/svgIcons",
+        scanStrategy: "component",
         dts: true,
-        dtsDir: "src/types",
+        dtsDir: "types",
+        preserveColor: /colorfull.*\.svg$/,
         // componentStyle:
         //   "width: 1em; height: 1em; fill:currentColor; scale: 1.2",
+      }),
+      codeInspectorPlugin({
+        bundler: "vite",
+      }),
+      TurboConsole({
+        extendedPathFileNames: ["index"],
       }),
       viteCommonjs(),
       requireTransform({ fileRegex: /.ts$|.vue$|.png$|.tsx$|.jpg$/ }),
@@ -119,5 +163,5 @@ export default defineConfig(({ command, mode }): UserConfig => {
       drop: command === "serve" ? [] : ["console"],
     },
   };
-  return config;
+  return config as UserConfig;
 });
