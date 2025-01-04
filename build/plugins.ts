@@ -19,7 +19,7 @@ import MetaLayouts from 'vite-plugin-vue-meta-layouts'
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
- * @LastEditTime: 2025-01-04 14:34:19
+ * @LastEditTime: 2025-01-04 15:08:05
  * @FilePath: build/plugins.ts
  * @Description:
  */
@@ -129,8 +129,8 @@ export function definePlugins() {
          */
         Compression({
             adapter: 'zip',
-            // source: path.join('./', `dist-${process.env.npm_package_version}`),
-            source: path.join('./', `dist`),
+            source: path.join('./', `dist-${process.env.npm_package_version}`),
+            // source: path.join('./', `dist`),
             outDir: path.join('./'),
         }),
 

@@ -1,16 +1,16 @@
-import { fileURLToPath, URL, resolve } from "node:url";
+import { fileURLToPath, URL } from "node:url";
 import { defineConfig, type UserConfig } from "vite";
-import legacy from "@vitejs/plugin-legacy";
-import vue2 from "@vitejs/plugin-vue2";
-import vue2Jsx from "@vitejs/plugin-vue2-jsx";
 import { visualizer } from "rollup-plugin-visualizer";
-import requireTransform from "vite-plugin-require-transform";
-import { esbuildCommonjs, viteCommonjs } from "@originjs/vite-plugin-commonjs";
-import UnpluginSvgComponent from "unplugin-svg-component/vite";
-import { codeInspectorPlugin } from "code-inspector-plugin";
-import TurboConsole from "unplugin-turbo-console/vite";
-import Compression from "unplugin-compression/vite";
+import { esbuildCommonjs } from "@originjs/vite-plugin-commonjs";
 import { definePlugins } from "./build/plugins";
+import process from "node:process";
+import { version } from "./package.json";
+
+console.log(
+  "%c Line:16🍷 npm_package_version",
+  "color:#3f7cff",
+  process.env.npm_package_version
+);
 /**
  * Vite Configure
  *
@@ -56,7 +56,11 @@ export default defineConfig(({ command, mode }): UserConfig => {
     // https://vitejs.dev/config/shared-options.html#base
     base: "./",
     server: {
-      host: "0.0.0.0",
+      /** 设置 host: true 才可以使用 Network 的形式，以 IP 访问项目 */
+      host: true,
+      // host: "0.0.0.0",
+      /** 跨域设置允许 */
+      cors: true,
       // 指定服务器应该监听哪个IP 地址
       port: 8082, // 端口号
       open: true, // 是否自动打开浏览器
@@ -94,9 +98,18 @@ export default defineConfig(({ command, mode }): UserConfig => {
       },
       extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
     },
+    define: {
+      __LM__VERSION__: JSON.stringify(version),
+    },
     build: {
+      outDir: `dist-${process.env.npm_package_version}`,
       // https://vitejs.dev/config/build-options.html#build-target
       target: "es2015",
+      /** 消除打包大小超过 500kb 警告 */
+      chunkSizeWarningLimit: 2000,
+      /** 打包后静态资源目录 */
+      assetsDir: "static",
+      sourcemap: true,
       // Minify option
       // https://vitejs.dev/config/build-options.html#build-minify
       minify: "esbuild",
@@ -133,6 +146,14 @@ export default defineConfig(({ command, mode }): UserConfig => {
     esbuild: {
       // Drop console when production build.
       drop: command === "serve" ? [] : ["console"],
+    },
+    /**
+     *  Vitest 单元测试配置
+     * @link https://cn.vitest.dev/config
+     */
+    test: {
+      include: ["tests/**/*.test.ts", "*/**/__tests__/**/*.ts"],
+      environment: "jsdom",
     },
   };
   return config as UserConfig;

@@ -1,7 +1,7 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.web.json",
 	"include": [
-		"env.d.ts",
+		"types/env.d.ts",
 		"src/**/*",
 		"src/**/*.vue",
 		"src/**/*.ts",
@@ -10,16 +10,17 @@
 		"types/**/*.d.ts",
 		"types/svg-component.d.ts",
 		"types/vg-component-global.d.ts",
-		"unplugin-vue-router/client"
+		"unplugin-vue-router/client",
 	],
 	"exclude": [
-		"src/**/__tests__/*"
+		"src/**/__tests__/*",
+		"tests/**/*.test.ts"
 	],
 	"compilerOptions": {
 		"composite": true,
 		"baseUrl": ".",
 		"allowJs": true,
-		"moduleResolution": "Bundler",
+//		 "moduleResolution": "Bundler", // 放开后vue-router等三方包无法识别
 		"paths": {
 			"@/*": [
 				"./src/*"

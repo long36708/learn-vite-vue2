@@ -5,6 +5,7 @@
 		"vitest.config.*",
 		"cypress.config.*",
 		"build/*.ts",
+		"playwright.config.*",
 		"types/**/*.d.ts"
 	],
 	"compilerOptions": {

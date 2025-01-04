@@ -26,10 +26,11 @@ import {
   onBeforeRouteLeave,
 } from "vue-router/composables";
 import { onMounted, onActivated, onDeactivated, onBeforeUpdate } from "vue";
-
+const route = useRoute();
 onMounted(() => {
-  const route = useRoute();
+  // const route = useRoute();
   console.info("route.path", route.path);
+  console.log("%c Line:33 🥐", "color:#f5ce50", route.meta);
 });
 
 onActivated(() => {

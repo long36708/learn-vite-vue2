@@ -15,6 +15,7 @@ declare module "*.vue" {
   export default component;
 }
 
+/** 声明 vite 环境变量的类型（如果未声明则默认是 any） */
 interface ImportMetaEnv {
   // see https://vitejs.dev/guide/env-and-mode.html#env-files
   // add .env variables.

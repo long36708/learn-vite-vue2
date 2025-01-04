@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
 import { useRoute, useRouter } from "vue-router/composables";
 import { onMounted, watch } from "vue";
+import { useAssetsImageURL } from "@/composables/url-composable";
 
+const liuyifeiURL = useAssetsImageURL("liuyifei", { extension: ".jpg" });
 onMounted(() => {
   /** Route */
   const route = useRoute();
@@ -24,14 +25,13 @@ onMounted(() => {
       <img
         alt="Vue logo"
         class="logo"
-        src="@/assets/logo.svg"
+        :src="liuyifeiURL"
         width="125"
         height="125"
       />
 
       <div class="wrapper">
-        <HelloWorld msg="You did it!" />
-
+        <SvgIcon name="colorfull/neon-cat" />
         <nav>
           <router-link to="/">Home</router-link>
           <router-link to="/about">About</router-link>
