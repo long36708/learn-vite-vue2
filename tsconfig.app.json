@@ -4,6 +4,10 @@
 		"env.d.ts",
 		"src/**/*",
 		"src/**/*.vue",
+		"src/**/*.ts",
+		"src/**/*.d.ts",
+		"src/types/*.d.ts",
+		"types/**/*.d.ts",
 		"types/svg-component.d.ts",
 		"types/vg-component-global.d.ts"
 	],

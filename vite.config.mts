@@ -9,7 +9,8 @@ import { esbuildCommonjs, viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import UnpluginSvgComponent from "unplugin-svg-component/vite";
 import { codeInspectorPlugin } from "code-inspector-plugin";
 import TurboConsole from "unplugin-turbo-console/vite";
-
+import Compression from "unplugin-compression/vite";
+import { definePlugins } from "./build/plugins";
 /**
  * Vite Configure
  *
@@ -78,36 +79,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
         },
       },
     },
-    plugins: [
-      // Vue2
-      // https://github.com/vitejs/vite-plugin-vue2
-      vue2(),
-      vue2Jsx(),
-      legacy({
-        targets: ["ie >= 11"],
-        additionalLegacyPolyfills: ["regenerator-runtime/runtime"], // 添加 polyfill
-      }),
-      // compress assets
-      // https://github.com/vbenjs/vite-plugin-compression
-      // viteCompression(),
-      UnpluginSvgComponent({
-        iconDir: "src/assets/svgIcons",
-        scanStrategy: "component",
-        dts: true,
-        dtsDir: "types",
-        preserveColor: /colorfull.*\.svg$/,
-        // componentStyle:
-        //   "width: 1em; height: 1em; fill:currentColor; scale: 1.2",
-      }),
-      codeInspectorPlugin({
-        bundler: "vite",
-      }),
-      TurboConsole({
-        extendedPathFileNames: ["index"],
-      }),
-      viteCommonjs(),
-      requireTransform({ fileRegex: /.ts$|.vue$|.png$|.tsx$|.jpg$/ }),
-    ],
+    plugins: definePlugins(),
     optimizeDeps: {
       exclude: ["vue-demi"],
       esbuildOptions: {

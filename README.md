@@ -74,3 +74,15 @@ the `clean` command.
 
 在这种情况下，请停止devServer并删除node_modules目录下的`.vite`中的所有文件”目录。
 您也可以使用`clean`命令运行它.
+
+## 技术栈
+
+- vxe-table
+    - https://vxetable.cn/v3/#/demo/list
+- vue-query
+    - https://tanstack.com/query/latest/docs/framework/vue/overview
+- vue-use
+    - https://github.com/vueuse/vueuse#readme
+    - https://vueuse.org/
+- vee-validate@3
+    - https://vee-validate.logaretm.com/v3
