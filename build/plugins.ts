@@ -13,11 +13,13 @@ import requireTransform from "vite-plugin-require-transform";
 import tsconfigPaths from 'vite-tsconfig-paths'
 import Info from 'unplugin-info/vite'
 import {webUpdateNotice} from '@plugin-web-update-notification/vite'
+import VueRouter from 'unplugin-vue-router/vite'
+import MetaLayouts from 'vite-plugin-vue-meta-layouts'
 
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
- * @LastEditTime: 2025-01-04 12:59:50
+ * @LastEditTime: 2025-01-04 14:34:19
  * @FilePath: build/plugins.ts
  * @Description:
  */
@@ -30,6 +32,21 @@ const getTypesPath = (_path: string) => path.join(types, _path)
 
 export function definePlugins() {
     return [
+
+        /**
+         * unplugin-vue-router
+         * File based typed routing for Vue Router
+         * only for vue3
+         * ⚠️ Vue must be placed after VueRouter()
+         * import { routes } from "vue-router/auto-routes";
+         * @link https://github.com/posva/unplugin-vue-router
+         */
+        VueRouter({
+            routesFolder: 'src/views',
+            // dts: '../types/typed-router.d.ts',
+            dts: getTypesPath('./typed-router.d.ts'),
+        }),
+
         /**
          * Vue2 plugin
          * @link https://github.com/vitejs/vite-plugin-vue2
@@ -54,6 +71,15 @@ export function definePlugins() {
          * @link https://github.com/vbenjs/vite-plugin-compression
          */
         // viteCompression(),
+
+        /**
+         * 因为原来的 vite-plugin-vue-layouts 在 layout 组件中修改css 热更新不生效，故而换成这个
+         * @link https://github.com/dishait/vite-plugin-vue-meta-layouts
+         */
+        MetaLayouts({
+            // 打开修复 https://github.com/JohnCampionJr/vite-plugin-vue-layouts/issues/134，默认为 false 关闭
+            skipTopLevelRouteLayout: true,
+        }),
 
         /**
          * svg组件自动导入

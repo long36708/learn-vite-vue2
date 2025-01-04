@@ -9,7 +9,8 @@
 		"src/types/*.d.ts",
 		"types/**/*.d.ts",
 		"types/svg-component.d.ts",
-		"types/vg-component-global.d.ts"
+		"types/vg-component-global.d.ts",
+		"unplugin-vue-router/client"
 	],
 	"exclude": [
 		"src/**/__tests__/*"
@@ -18,6 +19,7 @@
 		"composite": true,
 		"baseUrl": ".",
 		"allowJs": true,
+		"moduleResolution": "Bundler",
 		"paths": {
 			"@/*": [
 				"./src/*"

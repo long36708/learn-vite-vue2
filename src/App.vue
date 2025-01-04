@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import HelloWorld from "./components/HelloWorld.vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router/composables";
 import { onMounted, watch } from "vue";
 
 onMounted(() => {
   /** Route */
   const route = useRoute();
+  const router = useRouter();
   // Watch
   watch(
     () => route?.name,
-    (name) => console.log("route is changed:", name),
+    (name) => console.log("route is changed:", name, route, router),
     {
       immediate: true,
     }
