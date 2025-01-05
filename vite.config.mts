@@ -17,42 +17,7 @@ console.log(
  * @see {@link https://vitejs.dev/config/}
  */
 export default defineConfig(({ command, mode }): UserConfig => {
-  const config: {
-    server: {
-      proxy: {
-        "/api": {
-          cors: boolean;
-          changeOrigin: boolean;
-          configure: (proxy, options) => void;
-          rewrite: (path) => string;
-          target: string;
-        };
-      };
-      port: number;
-      strictPort: boolean;
-      host: string;
-      https: boolean;
-      open: boolean;
-    };
-    resolve: { extensions: string[]; alias: { "@": string; "~": string } };
-    build: {
-      minify: string;
-      rollupOptions: {
-        output: {
-          manualChunks: { vue: string[] };
-          plugins: (Plugin | undefined)[];
-        };
-      };
-      target: string;
-    };
-    plugins: any[];
-    optimizeDeps: {
-      esbuildOptions: { plugins: { name: string; setup(build: any): void }[] };
-      exclude: string[];
-    };
-    esbuild: { drop: string[] };
-    base: string;
-  } = {
+  const config = {
     // https://vitejs.dev/config/shared-options.html#base
     base: "./",
     server: {

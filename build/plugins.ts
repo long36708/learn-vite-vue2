@@ -19,7 +19,7 @@ import MetaLayouts from 'vite-plugin-vue-meta-layouts'
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
- * @LastEditTime: 2025-01-04 15:08:05
+ * @LastEditTime: 2025-01-05 13:33:16
  * @FilePath: build/plugins.ts
  * @Description:
  */

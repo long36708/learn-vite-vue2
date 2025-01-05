@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-04 18:21:30
+ * @LastEditTime: 2025-01-05 10:53:10
  * @FilePath: histoire.config.ts
  * @Description:
  */
@@ -16,5 +16,5 @@ export default defineConfig({
     // '@ui/packages/ui/src/components/**/*.story.vue', // does not work
     "./src/**/*.story.vue",
   ],
-  // setupFile: "./histoire-setup.ts", // does not work
+  setupFile: "./histoire.setup.ts", // does not work
 });
