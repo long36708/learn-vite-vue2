@@ -8,6 +8,7 @@
 export const mockBigData = () => {
   // const count = 1_000_000;
   // const count = 250;
+  // const count = 25000; // 卡
   const count = 250_000;
   const data = [];
   for (let i = 0; i < count; i++) {
