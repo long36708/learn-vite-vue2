@@ -151,7 +151,7 @@ importers:
         specifier: ^0.10.9
         version: 0.10.9(vue-router@3.6.5(vue@2.7.16))(vue@2.7.16)
       vite:
-        specifier: ^3.0 .2
+        specifier: ^3.0.2
         version: 3.2.11(@types/node@16.18.115)(terser@5.36.0)
       vite-plugin-require-transform:
         specifier: ^1.0.21
@@ -2931,10 +2931,6 @@ packages:
     resolution: {integrity: sha512-Q8qQfPiZ+THO/3ZrOrO0cJJKfpYCagtMUkXbnEfmgUjwXg6z/WBeOyS9APBBPCTSiDV+s4SwQGu8yFsiMRIudg==}
     engines: {node: '>=4'}
 
-  postcss@8.4.47:
-    resolution: {integrity: sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==}
-    engines: {node: ^10 || ^12 || >=14}
-
   postcss@8.4.49:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
     engines: {node: ^10 || ^12 || >=14}
@@ -4782,7 +4778,7 @@ snapshots:
   '@vue/compiler-sfc@2.7.16':
     dependencies:
       '@babel/parser': 7.26.1
-      postcss: 8.4.47
+      postcss: 8.4.49
       source-map: 0.6.1
     optionalDependencies:
       prettier: 2.8.8
@@ -4796,7 +4792,7 @@ snapshots:
       '@vue/shared': 3.5.12
       estree-walker: 2.0.2
       magic-string: 0.30.17
-      postcss: 8.4.47
+      postcss: 8.4.49
       source-map-js: 1.2.1
 
   '@vue/compiler-sfc@3.5.13':
@@ -6943,12 +6939,6 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss@8.4.47:
-    dependencies:
-      nanoid: 3.3.7
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
   postcss@8.4.49:
     dependencies:
       nanoid: 3.3.7
@@ -7693,7 +7683,7 @@ snapshots:
   vite@3.2.11(@types/node@16.18.115)(terser@5.36.0):
     dependencies:
       esbuild: 0.15.18
-      postcss: 8.4.47
+      postcss: 8.4.49
       resolve: 1.22.8
       rollup: 2.79.2
     optionalDependencies:

@@ -7,27 +7,26 @@
  -->
 <template>
   <div class="">
-    <h1>BigDataDemo1</h1>
-    <button @click="handleSetData">点击初始赋值</button>
+    <h1>BigDataDemo2</h1>
     <input type="text" v-model="filterText" />
     <button @click="handleSearch">搜索</button>
     <button @click="reset">重置</button>
     <button @click="handleCheckAll">全选</button>
     <button @click="handleCancelCheckAll">取消全选</button>
-    <button @click="handleLog">当前选中项</button>
     <div>
       <span>搜索到的结果数：{{ filteredLabelList.length }}</span>
       <span>当前选中数：{{ checkedLabelKeys.length }}</span>
 
       <el-checkbox-group
-        class="checkbox-group"
-        v-model="currentPageCheckedKeys"
-        @change="handleCheckedLabelChange"
+          class="checkbox-group"
+          v-model="currentPageCheckedKeys"
+          @change="handleCheckedLabelChange"
       >
         <el-checkbox
-          v-for="item in visibleList"
-          :key="item.id"
-          :label="item.id"
+            v-for="item in visibleList"
+            :key="item.id"
+            :label="item.id"
+            @change="handleChangeItem"
         >
           {{ item.label }}
         </el-checkbox>
@@ -36,26 +35,36 @@
       <div class="block">
         <section class="pagination-wrap">
           <el-pagination
-            :current-page="currentPage"
-            :page-sizes="[100, 200, 300, 400,500,1000]"
-            :page-size="pageSize"
-            layout="sizes, prev, pager, next, jumper"
-            :total="filteredLabelList.length"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[100, 200, 300, 400,500,1000]"
+              :page-size="pageSize"
+              layout="sizes, prev, pager, next"
+              :total="filteredLabelList.length"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
           />
         </section>
       </div>
     </div>
   </div>
 </template>
+
+<!--<script setup>-->
+
+<!--// defineExpose({-->
+<!--//   setData(mockData) {-->
+<!--//     debugger-->
+<!--//     // this.setData(mockData);-->
+<!--//   }-->
+<!--// })-->
+
+<!--</script>-->
 <script>
-import { mockBigData } from "./mockData.js";
-import { PerformanceMonitor } from "@/utils/perf";
+
 import { compare } from "@/views/BigDataDemo/utils";
 
 export default {
-  name: "bigDataDemo1",
+  name: "bigDataDemo2",
   data() {
     return {
       labelList: [],
@@ -71,14 +80,21 @@ export default {
     };
   },
   methods: {
-    handleSetData() {
-      this.labelList = this.mockData;
+    handleChangeItem(value){
+      console.log('handleChangeItem',value)
+    },
+    setData(mockData) {
+      // debugger
+      this.labelList = mockData;
       // todo 测试性能
       // this.labelList.length = 10_000;
       // this.labelList.length = 1_000;
       console.log("labelList", this.labelList);
       this.handleSearch();
       this.checkedLabelKeys=[];
+    },
+    getCheckedData(){
+      return this.checkedLabelKeys;
     },
     handleCheckedLabelChange(value, e) {
       console.log("handleCheckedLabelChange", value, e);
@@ -160,12 +176,12 @@ export default {
         } else if (type === "del") {
           console.log("取消选中");
           this.checkedLabelKeys = this.checkedLabelKeys.filter(
-            (item) => !data.includes(item)
+              (item) => !data.includes(item)
           );
         } else {
           // 当前页全部取消选中
           this.checkedLabelKeys = this.checkedLabelKeys.filter(
-            (item) => !this.currentPageKeys.includes(item)
+              (item) => !this.currentPageKeys.includes(item)
           );
         }
       },
@@ -180,12 +196,9 @@ export default {
       //   JSON.parse(JSON.stringify(this.currentPageKeys))
       // );
       this.previousPageCheckedKeys = this.checkedLabelKeys.filter((item) =>
-        this.currentPageKeys.includes(item)
+          this.currentPageKeys.includes(item)
       );
     },
-  },
-  mounted() {
-    this.mockData = mockBigData();
   },
 };
 </script>
