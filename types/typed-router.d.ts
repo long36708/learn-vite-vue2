@@ -23,6 +23,8 @@ declare module 'vue-router/auto-routes' {
     '/BigDataDemo/demo1.story': RouteRecordInfo<'/BigDataDemo/demo1.story', '/BigDataDemo/demo1/story', Record<never, never>, Record<never, never>>,
     '/BigDataDemo/demo2': RouteRecordInfo<'/BigDataDemo/demo2', '/BigDataDemo/demo2', Record<never, never>, Record<never, never>>,
     '/BigDataDemo/demo2.story': RouteRecordInfo<'/BigDataDemo/demo2.story', '/BigDataDemo/demo2/story', Record<never, never>, Record<never, never>>,
+    '/BigDataDemo/demo3': RouteRecordInfo<'/BigDataDemo/demo3', '/BigDataDemo/demo3', Record<never, never>, Record<never, never>>,
+    '/BigDataDemo/demo3.story': RouteRecordInfo<'/BigDataDemo/demo3.story', '/BigDataDemo/demo3/story', Record<never, never>, Record<never, never>>,
     '/CountDemo': RouteRecordInfo<'/CountDemo', '/CountDemo', Record<never, never>, Record<never, never>>,
     '/FetchDemo': RouteRecordInfo<'/FetchDemo', '/FetchDemo', Record<never, never>, Record<never, never>>,
     '/HomeView': RouteRecordInfo<'/HomeView', '/HomeView', Record<never, never>, Record<never, never>>,
