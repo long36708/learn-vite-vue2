@@ -1,18 +1,21 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-05 10:37:06
- * @LastEditTime: 2025-01-06 09:39:28
- * @FilePath: src/views/BigDataDemo/demo2.story.vue
+ * @LastEditTime: 2025-01-07 09:33:08
+ * @FilePath: src/views/BigDataDemo/demo3.story.vue
  * @Description:
  -->
 <script setup lang="ts">
-import bigDataDemo2 from "./demo2.vue";
+import bigDataDemo from "./demo3.vue";
+import { onMounted, ref } from "vue";
+
+onMounted(() => {});
 </script>
 
 <template>
-  <Story title="大数据量demo2">
-    <Variant title="demo2">
-      <bigDataDemo2></bigDataDemo2>
+  <Story title="大数据量demo3">
+    <Variant title="demo3">
+      <bigDataDemo ref="demoRef"></bigDataDemo>
     </Variant>
   </Story>
 </template>

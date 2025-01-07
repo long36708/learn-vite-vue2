@@ -1,8 +1,8 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-05 10:29:42
- * @LastEditTime: 2025-01-06 10:04:47
- * @FilePath: src/views/BigDataDemo/demo2.vue
+ * @LastEditTime: 2025-01-07 09:27:21
+ * @FilePath: src/views/BigDataDemo/demo3.vue
  * @Description:
  -->
 <template>
@@ -53,7 +53,7 @@ import { PerformanceMonitor } from "@/utils/perf";
 import { compare } from "@/views/BigDataDemo/utils";
 
 export default {
-  name: "bigDataDemo2",
+  name: "bigDataDemo3",
   data() {
     return {
       labelList: [],
