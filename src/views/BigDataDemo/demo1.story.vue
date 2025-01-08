@@ -10,7 +10,7 @@ import bigDataDemo1 from "./demo1.vue";
 </script>
 
 <template>
-  <Story title="大数据量demo1">
+  <Story title="views/BigDataDemo/大数据量demo1">
     <Variant title="demo1">
       <bigDataDemo1></bigDataDemo1>
     </Variant>

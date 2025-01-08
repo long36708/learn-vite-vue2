@@ -15,7 +15,7 @@ import Info from 'unplugin-info/vite'
 import {webUpdateNotice} from '@plugin-web-update-notification/vite'
 import VueRouter from 'unplugin-vue-router/vite'
 import MetaLayouts from 'vite-plugin-vue-meta-layouts'
-
+import Icons from 'unplugin-icons/vite'
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
@@ -147,6 +147,9 @@ export function definePlugins() {
          */
         Info(),
 
+        Icons({
+            autoInstall: true,
+        }),
         /**
          * Detect webpage updates and notify user to reload. support vite, umijs and webpack.
          * @link https://github.com/GreatAuk/plugin-web-update-notification

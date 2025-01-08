@@ -22,7 +22,7 @@ const handleLog=()=> {
 </script>
 
 <template>
-  <Story title="大数据量demo2">
+  <Story title="views/BigDataDemo/大数据量demo2">
     <Variant title="demo2">
       <button @click="handleSetData">点击初始赋值</button>
       <button @click="handleLog">当前选中项</button>

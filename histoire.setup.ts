@@ -11,13 +11,15 @@ import Vue from "vue";
 // import router from "../src/router";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-
+import { addCollection } from '@iconify/vue'
+import carbon from '@iconify/json/json/carbon.json'
 export const setupVue2 = defineSetupVue2(({ story, variant }) => {
   // Vue plugin
 
   // Global component
   // Vue.component("GlobalComponent", MyGlobalComponent);
   Vue.use(ElementUI);
+  addCollection(carbon)
   // App options
   // return {
   //   // store, // Vuex Store

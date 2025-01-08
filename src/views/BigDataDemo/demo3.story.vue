@@ -13,7 +13,7 @@ onMounted(() => {});
 </script>
 
 <template>
-  <Story title="大数据量demo3">
+  <Story title="views/BigDataDemo/大数据量demo3">
     <Variant title="demo3">
       <bigDataDemo ref="demoRef"></bigDataDemo>
     </Variant>

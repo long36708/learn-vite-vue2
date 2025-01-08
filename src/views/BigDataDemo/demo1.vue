@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     handleSetData() {
-      this.labelList = this.mockData;
+      this.labelList = Object.freeze(this.mockData);
       // todo 测试性能
       // this.labelList.length = 10_000;
       // this.labelList.length = 1_000;
@@ -105,15 +105,15 @@ export default {
     },
     handleSizeChange(size) {
       this.pageSize = size;
-      this.$nextTick(() => {
-        this.onSearch();
-      });
+      // this.$nextTick(() => {
+      //   this.onSearch();
+      // });
     },
     handleCurrentChange(curPage) {
       this.currentPage = curPage;
-      this.$nextTick(() => {
-        this.onSearch();
-      });
+      // this.$nextTick(() => {
+      //   this.onSearch();
+      // });
     },
     handleCheckAll() {
       this.checkedLabelKeys = this.filteredLabelList.map((item) => item.id);
