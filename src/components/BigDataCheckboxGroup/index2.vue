@@ -47,7 +47,7 @@
       >
         全选当前页
       </el-checkbox>
-      <el-checkbox v-show="shouldLimitChecked" v-model="isCheckedLimit">
+      <el-checkbox v-show="shouldLimitChecked" v-model="isCheckedLimit" @change="handleCheckedLimitChange">
         全选前{{ maxLength }}项
       </el-checkbox>
       <el-checkbox-group
@@ -164,7 +164,7 @@ export default {
       isCheckedAll: false, // 是否全选所有页面的checkbox
       isIndeterminate: false, // 是否半选checkbox
       isCurrentPageCheckedAll: false, // 是否全选当前页
-      // isCheckedLimit: false, // 是否全选前xxx条
+      isCheckedLimit: false, // 是否全选前xxx条
       previousPageCheckedKeys: [], // 上一次当前页面选中的keys
     };
   },
@@ -294,6 +294,24 @@ export default {
         this.previousPageCheckedKeys = [];
       }
     },
+    handleCheckedLimitChange(value){
+      if(value){
+        const maxLength = this.maxLength;
+        this.checkedLabelKeys = getLimitKeys(
+            this.filteredLabelList,
+            maxLength
+        );
+        this.previousPageCheckedKeys = this.checkedLabelKeys.filter((item) =>
+            this.currentPageKeys.includes(item)
+        );
+        // 点击选中前xxx条后是否跳到第一页待确认
+        // this.currentPage = 1
+      }else {
+        this.checkedLabelKeys = [];
+        this.previousPageCheckedKeys = [];
+      }
+
+    }
   },
   computed: {
     shouldLimitChecked() {
@@ -417,39 +435,6 @@ export default {
         }
       },
     },
-    isCheckedLimit: {
-      get() {
-        if (!this.shouldLimitChecked) return false;
-        const maxLength = this.maxLength;
-        const checkedCount = this.checkedLabelKeys.length;
-        if (checkedCount !== maxLength) return false;
-        const limitKeys = getLimitKeys(this.filteredLabelList, maxLength);
-        const _checkedLabelKeys = [...this.checkedLabelKeys];
-        if (limitKeys.length !== checkedCount) {
-          return false;
-        } else {
-          // 若数量相等，还需要比较是否内容完全一致（顺序可以不同）
-          return limitKeys.every((id) => _checkedLabelKeys.includes(id));
-        }
-      },
-      set(value) {
-        if (value) {
-          const maxLength = this.maxLength;
-          this.checkedLabelKeys = getLimitKeys(
-              this.filteredLabelList,
-              maxLength
-          );
-          this.previousPageCheckedKeys = this.checkedLabelKeys.filter((item) =>
-              this.currentPageKeys.includes(item)
-          );
-          // 点击选中前xxx条后是否跳到第一页待确认
-          // this.currentPage = 1
-        } else {
-          this.checkedLabelKeys = [];
-          this.previousPageCheckedKeys = [];
-        }
-      },
-    },
   },
   watch: {
     dataSource(newValue) {
@@ -485,6 +470,26 @@ export default {
           nextCheckedKeys,
           visibleList
       );
+
+      // 计算是否达到选中限制
+      if (!this.shouldLimitChecked) {
+        this.isCheckedLimit = false
+        return
+      }
+      const maxLength = this.maxLength;
+      // const checkedCount = this.checkedLabelKeys.length;
+      if (checkedCount !== maxLength) {
+        this.isCheckedLimit = false
+        return
+      }
+      const limitKeys = getLimitKeys(this.filteredLabelList, maxLength);
+      const _checkedLabelKeys = [...this.checkedLabelKeys];
+      if (limitKeys.length !== checkedCount) {
+        this.isCheckedLimit = false
+      } else {
+        // 若数量相等，还需要比较是否内容完全一致（顺序可以不同）
+        this.isCheckedLimit = limitKeys.every((id) => _checkedLabelKeys.includes(id));
+      }
     },
     currentPage(newValue) {
       // 计算当前页选中状态

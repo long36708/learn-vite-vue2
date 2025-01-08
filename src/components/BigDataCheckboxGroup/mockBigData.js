@@ -1,8 +1,9 @@
 
-export const mockBigData = () => {
+export const INIT_COUNT= 300_000;
+export const mockBigData = (count) => {
     // const count = 1_000_000;
     // const count = 250;
-    const count = 250_000;
+    // const count = 250_000;
     const data = [];
     for (let i = 0; i < count; i++) {
         data.push({
