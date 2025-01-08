@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {compare, getCurrentPageCheckedKeys, getLimitKeys, isEqualArray, normalizeList,} from "./utils.js";
+import {compare, difference, getCurrentPageCheckedKeys, getLimitKeys, isEqualArray, normalizeList,} from "./utils.js";
 
 export default {
   name: "BigDataCheckboxGroup",
@@ -265,6 +265,7 @@ export default {
      * 当没有数据时，禁用全选当前页按钮
      * 当前页数量超过最大限制时，禁用全选当前页按钮
      * 当 pageSize + 当前选中数量大于最大限制时，禁用全选当前页按钮
+     * 当开启了最大数量，并且当前页数量达到最大限制时，对超过指定数量的页码进行禁用全选当前页按钮
      * @returns {boolean}
      */
     disableCheckAllCurrentPageBtn() {
@@ -274,6 +275,25 @@ export default {
       ) {
         return true;
       }
+      if (!this.shouldLimitChecked) {
+        return false
+      }
+      // 若开启了限制，只判断前几页允许勾选，超过限制的禁止
+      if (this.isCheckedLimit) {
+        const pageNo = Math.floor(this.maxLength / this.innerPageSize);
+        if (this.currentPage > pageNo) {
+          return true
+        }
+      }
+      // 若当前页选中了，则不禁用，否则无法取消全选
+      if (this.isCurrentPageCheckedAll) {
+        return false
+      }
+      // 否则，需判断假设当前页允许勾选，是否会超出允许的限制;若超出了，并且不是选中当前页
+      const  checkedLabelKeysWithoutCurrentPage= difference(this.checkedLabelKeys,this.currentPageKeys)
+      return this.visibleList.length + checkedLabelKeysWithoutCurrentPage.length >
+          this.maxLength;
+
       // 这样处理不合适，因为当前页选中后，会无法一次性取消选中
       // if (this.shouldLimitChecked) {
       //   const pageNo = Math.ceil(this.maxLength / this.innerPageSize);
@@ -284,7 +304,7 @@ export default {
       //     );
       //   }
       // }
-      return false;
+      // return false
     },
     // 当前页选中的keys
     currentPageCheckedKeys: {

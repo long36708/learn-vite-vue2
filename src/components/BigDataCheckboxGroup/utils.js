@@ -1,6 +1,9 @@
 export const ITEM_KEY = "id";
 export const ITEM_NAME = "label";
 
+export const EVENT_NAME_UP_MAX = 'emitUpMax';
+export const MAX_LENGTH = Infinity
+
 /**
  * 将数据源格式化为包含id和label的对象数组
  * @param dataSource
@@ -13,13 +16,14 @@ export function normalizeList(
     itemKey = ITEM_KEY,
     itemName = ITEM_NAME
 ) {
-    if (!Array.isArray(dataSource)) {
+    if (!Array.isArray(dataSource) || dataSource.length === 0) {
         return [];
     }
     const list = [];
     for (let i = 0; i < dataSource.length; i++) {
         const item = dataSource[i];
-        if (!item[itemKey]) {
+        if (item[itemKey] === undefined) {
+            // 可以为0，但是不允许是 undefined
             console.error(`数据源中没有找到itemKey为${itemKey}的字段，请检查数据`);
         }
         list.push({
@@ -135,4 +139,14 @@ export function calcIfCheckedAll(allCheckedCount, filterLength) {
         isCheckedAll: allCheckedCount > 0 && allCheckedCount === filterLength,
         isIndeterminate: allCheckedCount > 0 && allCheckedCount < filterLength,
     };
+}
+
+/**
+ * 数组差集 在arr1中，不在arr2中的元素
+ * @param arr1
+ * @param arr2
+ */
+
+export function difference(arr1, arr2) {
+    return Array.from(new Set(arr1.filter((item) => !arr2.includes(item))));
 }

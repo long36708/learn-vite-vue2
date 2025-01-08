@@ -2,17 +2,17 @@
   <div class="bigdata-checkbox-group-container">
     <div class="filter-container">
       <el-input
-          class="search-input"
-          type="text"
           v-model.trim="filterText"
+          class="search-input"
           placeholder="请输入搜索内容"
           suffix-icon="h-icon-search"
+          type="text"
       />
       <el-button
+          class="search-btn"
           type="primary"
           @click="handleSearch"
           @keyup.enter.native="handleSearch"
-          class="search-btn"
       >搜索
       </el-button>
       <!--      <el-button @click="handleReset">重置</el-button>-->
@@ -20,7 +20,7 @@
     <div class="result-container">
       <span class="text">已选：{{ checkedLabelKeys.length }} 项</span>
       <span class="text">共搜索出：{{ filteredLabelList.length }} 项</span>
-      <span class="text" v-show="shouldLimitChecked">
+      <span v-show="shouldLimitChecked" class="text">
         允许的最大勾选数量：{{ maxLength }}</span
       >
       <span class="text">全选框的状态：{{ isCheckedAll }}</span>
@@ -30,12 +30,12 @@
       >全选前{{ maxLength }}的状态：{{ isCheckedLimit }}
       </span>
     </div>
-    <div class="operate-container" v-show="hasVisibleData">
+    <div v-show="hasVisibleData" class="operate-container">
       <el-checkbox
           v-show="!shouldLimitChecked"
           v-model="isCheckedAll"
-          :indeterminate="isIndeterminate"
           :disabled="disableCheckAllBtn"
+          :indeterminate="isIndeterminate"
           @change="handleCheckedAllChange"
       >
         全选
@@ -51,23 +51,23 @@
         全选前{{ maxLength }}项
       </el-checkbox>
       <el-checkbox-group
-          class="checkbox-group"
           v-model="currentPageCheckedKeys"
+          class="checkbox-group"
           @change="handleCheckedLabelChange"
       >
         <el-checkbox
             v-for="item in visibleList"
             :key="item.id"
-            :label="item.id"
             :disabled="isCheckboxDisabled(item.id)"
+            :label="item.id"
             @change="handleCheckedItemChange"
         >
-          <CustomLabel :item="item" :itemComponent="itemComponent" />
+          <CustomLabel :item="item" :itemComponent="itemComponent"/>
         </el-checkbox>
       </el-checkbox-group>
     </div>
 
-    <div class="operate-container empty-status" v-show="!hasVisibleData">
+    <div v-show="!hasVisibleData" class="operate-container empty-status">
       <slot name="empty">
         <div class="empty">暂无数据</div>
         <!--      <h-empty>暂无数据</h-empty>-->
@@ -76,10 +76,10 @@
     <section class="pagination-wrap">
       <el-pagination
           :current-page="currentPage"
-          :page-sizes="pageSizes"
           :page-size="innerPageSize"
-          layout="sizes, prev, pager, next, jumper"
+          :page-sizes="pageSizes"
           :total="filteredLabelList.length"
+          layout="sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
       />
@@ -91,9 +91,11 @@
 import {
   calcIfCheckedAll,
   calcIfCurrentPageCheckedAll,
-  compare,
+  compare, difference,
+  EVENT_NAME_UP_MAX,
   getLimitKeys,
   isEqualArray,
+  MAX_LENGTH,
   normalizeList,
 } from "./utils.js";
 
@@ -134,7 +136,7 @@ export default {
     CustomLabel: {
       render(h) {
         // console.log("CustomLabel", this.$attrs);
-        const { item, itemComponent } = this.$attrs;
+        const {item, itemComponent} = this.$attrs;
         if (itemComponent) {
           return h(
               itemComponent,
@@ -249,6 +251,7 @@ export default {
         if (nextCheckedKeys.length > this.maxLength) {
           console.log(`可勾选数据量超过最大限制${this.maxLength}`);
           nextCheckedKeys = nextCheckedKeys.slice(0, this.maxLength);
+          this.$emit(EVENT_NAME_UP_MAX)
           return;
         }
         this.checkedLabelKeys = nextCheckedKeys;
@@ -268,6 +271,7 @@ export default {
         if (curKeys.length > this.maxLength) {
           console.log(`可勾选数据量超过最大限制${this.maxLength}`);
           this.isCurrentPageCheckedAll = false;
+          this.$emit(EVENT_NAME_UP_MAX)
           return false;
         }
         const nextCheckedKeys = [
@@ -276,6 +280,7 @@ export default {
         if (nextCheckedKeys.length > this.maxLength) {
           console.log(`可勾选数据量超过最大限制${this.maxLength}`);
           this.isCurrentPageCheckedAll = false;
+          this.$emit(EVENT_NAME_UP_MAX)
           return false;
         }
         this.checkedLabelKeys = nextCheckedKeys;
@@ -292,7 +297,7 @@ export default {
   },
   computed: {
     shouldLimitChecked() {
-      return this.maxLength !== Infinity;
+      return this.maxLength !== MAX_LENGTH && this.maxLength <= this.filteredLabelList.length;
     },
     visibleList() {
       const start = (this.currentPage - 1) * this.innerPageSize;
@@ -322,6 +327,7 @@ export default {
      * 当没有数据时，禁用全选当前页按钮
      * 当前页数量超过最大限制时，禁用全选当前页按钮
      * 当 pageSize + 当前选中数量大于最大限制时，禁用全选当前页按钮
+     * 当开启了最大数量，并且当前页数量达到最大限制时，对超过指定数量的页码进行禁用全选当前页按钮
      * @returns {boolean}
      */
     disableCheckAllCurrentPageBtn() {
@@ -331,6 +337,25 @@ export default {
       ) {
         return true;
       }
+      if (!this.shouldLimitChecked) {
+        return false
+      }
+      // 若开启了限制，只判断前几页允许勾选，超过限制的禁止
+      if (this.isCheckedLimit) {
+        const pageNo = Math.floor(this.maxLength / this.innerPageSize);
+        if (this.currentPage > pageNo) {
+          return true
+        }
+      }
+      // 若当前页选中了，则不禁用，否则无法取消全选
+      if (this.isCurrentPageCheckedAll) {
+        return false
+      }
+      // 否则，需判断假设当前页允许勾选，是否会超出允许的限制;若超出了，并且不是选中当前页
+      const  checkedLabelKeysWithoutCurrentPage= difference(this.checkedLabelKeys,this.currentPageKeys)
+      return this.visibleList.length + checkedLabelKeysWithoutCurrentPage.length >
+          this.maxLength;
+
       // 这样处理不合适，因为当前页选中后，会无法一次性取消选中
       // if (this.shouldLimitChecked) {
       //   const pageNo = Math.ceil(this.maxLength / this.innerPageSize);
@@ -341,7 +366,7 @@ export default {
       //     );
       //   }
       // }
-      return false;
+      // return false
     },
     // 当前页选中的keys
     currentPageCheckedKeys: {
@@ -366,7 +391,7 @@ export default {
             value,
             JSON.parse(JSON.stringify(this.previousPageCheckedKeys))
         );
-        const { type, data } = compare(value, this.previousPageCheckedKeys);
+        const {type, data} = compare(value, this.previousPageCheckedKeys);
         this.previousPageCheckedKeys = [...value];
         if (type === "add") {
           const nextCheckedKeys = [
@@ -375,6 +400,7 @@ export default {
 
           if (nextCheckedKeys.length > this.maxLength) {
             console.log(`可勾选数据量超过最大限制${this.maxLength}`);
+            this.$emit(EVENT_NAME_UP_MAX)
             return;
           }
           this.checkedLabelKeys = nextCheckedKeys;
@@ -416,6 +442,8 @@ export default {
           this.previousPageCheckedKeys = this.checkedLabelKeys.filter((item) =>
               this.currentPageKeys.includes(item)
           );
+          // 点击选中前xxx条后是否跳到第一页待确认
+          // this.currentPage = 1
         } else {
           this.checkedLabelKeys = [];
           this.previousPageCheckedKeys = [];
@@ -443,7 +471,7 @@ export default {
       console.log("nextCheckedKeys", nextCheckedKeys);
       const checkedCount = nextCheckedKeys.length;
       const filterLength = this.filteredLabelList.length;
-      const { isCheckedAll, isIndeterminate } = calcIfCheckedAll(
+      const {isCheckedAll, isIndeterminate} = calcIfCheckedAll(
           checkedCount,
           filterLength
       );
@@ -451,10 +479,27 @@ export default {
       this.isIndeterminate = isIndeterminate;
 
       // 计算当前页选中状态
-      const { currentPageKeys, visibleList } = this;
+      const {currentPageKeys, visibleList} = this;
       this.isCurrentPageCheckedAll = calcIfCurrentPageCheckedAll(
           currentPageKeys,
           nextCheckedKeys,
+          visibleList
+      );
+    },
+    currentPage(newValue) {
+      // 计算当前页选中状态
+      const {currentPageKeys, visibleList, checkedLabelKeys} = this;
+      this.isCurrentPageCheckedAll = calcIfCurrentPageCheckedAll(
+          currentPageKeys,
+          checkedLabelKeys,
+          visibleList
+      );
+    },
+    innerPageSize(newValue) {
+      const {currentPageKeys, visibleList, checkedLabelKeys} = this;
+      this.isCurrentPageCheckedAll = calcIfCurrentPageCheckedAll(
+          currentPageKeys,
+          checkedLabelKeys,
           visibleList
       );
     },

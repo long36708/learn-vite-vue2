@@ -1,5 +1,5 @@
 <template>
-  <Story title="BigDataCheckboxGroup/方案1-自定义item" :layout="{ type: 'single' }">
+  <Story title="BigDataCheckboxGroup/方案1-限制最大数量" :layout="{ type: 'single' }">
     <Variant title="demo1">
       <div class="opt-area">
         <button @click="handleSetData">设置值</button>
@@ -10,6 +10,8 @@
           :dataSource="dataSource"
           itemKey="key"
           :item-component="ItemDemo"
+          :max-length="maxLength"
+
       >
         <template #empty>空数据</template>
       </bigDataDemo1>
@@ -33,6 +35,10 @@ export default defineComponent({
       demo1Ref: "",
       dataSource: [],
       ItemDemo,
+      // maxLength: 50,
+      maxLength: 100,
+      // maxLength: 150,
+      // maxLength: 1000,
     };
   },
   methods: {
