@@ -60,7 +60,6 @@
             :key="item.id"
             :disabled="isCheckboxDisabled(item.id)"
             :label="item.id"
-            @change="handleCheckedItemChange"
         >
           <CustomLabel :item="item" :itemComponent="itemComponent"/>
         </el-checkbox>
@@ -91,7 +90,8 @@
 import {
   calcIfCheckedAll,
   calcIfCurrentPageCheckedAll,
-  compare, difference,
+  compare,
+  difference,
   EVENT_NAME_UP_MAX,
   getLimitKeys,
   isEqualArray,
@@ -236,11 +236,12 @@ export default {
     isCheckboxDisabled(id) {
       // 性能优化，减少不必要的计算
       if (!this.shouldLimitChecked) return false;
-      if (this.checkedLabelKeys.length < this.maxLength) {
+      // 使用 Set 提高查找效率
+      const checkedLabelKeys = this.checkedLabelKeys;
+
+      // 如果已选中的数量小于最大长度，或者当前 id 已经被选中，则返回 false
+      if (this.checkedLabelKeys.length < this.maxLength || checkedLabelKeys.some((key) => key === id)) {
         return false;
-      }
-      if (!this.checkedLabelKeys.includes(id)) {
-        return true;
       }
       return false;
     },
@@ -294,8 +295,8 @@ export default {
         this.previousPageCheckedKeys = [];
       }
     },
-    handleCheckedLimitChange(value){
-      if(value){
+    handleCheckedLimitChange(value) {
+      if (value) {
         const maxLength = this.maxLength;
         this.checkedLabelKeys = getLimitKeys(
             this.filteredLabelList,
@@ -306,7 +307,7 @@ export default {
         );
         // 点击选中前xxx条后是否跳到第一页待确认
         // this.currentPage = 1
-      }else {
+      } else {
         this.checkedLabelKeys = [];
         this.previousPageCheckedKeys = [];
       }
@@ -370,7 +371,7 @@ export default {
         return false
       }
       // 否则，需判断假设当前页允许勾选，是否会超出允许的限制;若超出了，并且不是选中当前页
-      const  checkedLabelKeysWithoutCurrentPage= difference(this.checkedLabelKeys,this.currentPageKeys)
+      const checkedLabelKeysWithoutCurrentPage = difference(this.checkedLabelKeys, this.currentPageKeys)
       return this.visibleList.length + checkedLabelKeysWithoutCurrentPage.length >
           this.maxLength;
 
