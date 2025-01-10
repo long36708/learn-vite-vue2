@@ -1,8 +1,8 @@
 export const ITEM_KEY = "id";
 export const ITEM_NAME = "label";
 
-export const EVENT_NAME_UP_MAX = 'emitUpMax';
-export const MAX_LENGTH = Infinity
+export const EVENT_NAME_UP_MAX = "emitUpMax";
+export const MAX_LENGTH = Infinity;
 
 /**
  * 将数据源格式化为包含id和label的对象数组
@@ -12,27 +12,27 @@ export const MAX_LENGTH = Infinity
  * @returns {*[]}
  */
 export function normalizeList(
-    dataSource,
-    itemKey = ITEM_KEY,
-    itemName = ITEM_NAME
+  dataSource,
+  itemKey = ITEM_KEY,
+  itemName = ITEM_NAME
 ) {
-    if (!Array.isArray(dataSource) || dataSource.length === 0) {
-        return [];
+  if (!Array.isArray(dataSource) || dataSource.length === 0) {
+    return [];
+  }
+  const list = [];
+  for (let i = 0; i < dataSource.length; i++) {
+    const item = dataSource[i];
+    if (item[itemKey] === undefined) {
+      // 可以为0，但是不允许是 undefined
+      console.error(`数据源中没有找到itemKey为${itemKey}的字段，请检查数据`);
     }
-    const list = [];
-    for (let i = 0; i < dataSource.length; i++) {
-        const item = dataSource[i];
-        if (item[itemKey] === undefined) {
-            // 可以为0，但是不允许是 undefined
-            console.error(`数据源中没有找到itemKey为${itemKey}的字段，请检查数据`);
-        }
-        list.push({
-            ...item,
-            [ITEM_KEY]: item[itemKey],
-            [ITEM_NAME]: item[itemName],
-        });
-    }
-    return list;
+    list.push({
+      ...item,
+      [ITEM_KEY]: item[itemKey],
+      [ITEM_NAME]: item[itemName],
+    });
+  }
+  return list;
 }
 
 /**
@@ -42,24 +42,24 @@ export function normalizeList(
  * @returns {{data: *, type: string}|{data, type: string}}
  */
 export const compare = (nextValues, preValues) => {
-    if (nextValues.length > preValues.length) {
-        // 新增了
-        return {
-            type: "add",
-            data: nextValues.filter((item) => !preValues.includes(item)),
-        };
-    } else if (nextValues.length < preValues.length) {
-        // 删除了
-        return {
-            type: "del",
-            data: preValues.filter((item) => !nextValues.includes(item)),
-        };
-    } else if (nextValues.length === preValues.length) {
-        return {
-            type: "equal",
-            data: nextValues,
-        };
-    }
+  if (nextValues.length > preValues.length) {
+    // 新增了
+    return {
+      type: "add",
+      data: nextValues.filter((item) => !preValues.includes(item)),
+    };
+  } else if (nextValues.length < preValues.length) {
+    // 删除了
+    return {
+      type: "del",
+      data: preValues.filter((item) => !nextValues.includes(item)),
+    };
+  } else if (nextValues.length === preValues.length) {
+    return {
+      type: "equal",
+      data: nextValues,
+    };
+  }
 };
 
 /**
@@ -69,15 +69,15 @@ export const compare = (nextValues, preValues) => {
  * @returns {*}
  */
 export function getCurrentPageCheckedKeys(visibleList, checkedLabelKeys) {
-    const visibleIds = visibleList.map((item) => item.id);
-    const result = [];
-    for (let i = 0; i < checkedLabelKeys.length; i++) {
-        const key = checkedLabelKeys[i];
-        if (visibleIds.includes(key)) {
-            result.push(key);
-        }
+  const visibleIds = visibleList.map((item) => item.id);
+  const result = [];
+  for (let i = 0; i < checkedLabelKeys.length; i++) {
+    const key = checkedLabelKeys[i];
+    if (visibleIds.includes(key)) {
+      result.push(key);
     }
-    return result;
+  }
+  return result;
 }
 
 /**
@@ -87,16 +87,16 @@ export function getCurrentPageCheckedKeys(visibleList, checkedLabelKeys) {
  * @returns {*}
  */
 export function getLimitKeys(filteredLabelList, maxLength) {
-    return filteredLabelList.slice(0, maxLength).map((item) => item.id);
+  return filteredLabelList.slice(0, maxLength).map((item) => item.id);
 }
 
 /**
  * 判断数组是否相等，不考虑顺序
  */
 export function isEqualArray(arr1, arr2) {
-    const arr1Str = arr1.sort().toString();
-    const arr2Str = arr2.sort().toString();
-    return arr1Str === arr2Str;
+  const arr1Str = arr1.sort().toString();
+  const arr2Str = arr2.sort().toString();
+  return arr1Str === arr2Str;
 }
 
 /**
@@ -107,25 +107,124 @@ export function isEqualArray(arr1, arr2) {
  * @returns {*|boolean}
  */
 export function calcIfCurrentPageCheckedAll(
-    currentPageKeys,
-    checkedLabelKeys,
-    visibleList
+  currentPageKeys,
+  checkedLabelKeys,
+  visibleList
 ) {
-    const currentPageKeysLength = currentPageKeys.length;
-    const checkedCount = checkedLabelKeys.length;
-    if (currentPageKeysLength === 0 || checkedCount === 0) {
-        return false;
+  const currentPageKeysLength = currentPageKeys.length;
+  const checkedCount = checkedLabelKeys.length;
+  if (currentPageKeysLength === 0 || checkedCount === 0) {
+    return false;
+  }
+  const currentPageCheckedKeys = getCurrentPageCheckedKeys(
+    visibleList,
+    checkedLabelKeys
+  );
+  // console.log("currentPageCheckedKeys", currentPageCheckedKeys);
+  if (currentPageCheckedKeys.length !== currentPageKeysLength) {
+    return false;
+  } else {
+    return currentPageKeys.every((key) => currentPageCheckedKeys.includes(key));
+  }
+}
+
+/**
+ * 判断当前页是否全选
+ * @param visibleList
+ * @param checkedLabelKeys
+ * @returns {boolean}
+ */
+export function calcIfCurrentPageCheckedAllNew(visibleList, checkedLabelKeys) {
+  const currentPageKeysLength = visibleList.length;
+  const checkedCount = checkedLabelKeys.length;
+  if (currentPageKeysLength === 0 || checkedCount === 0) {
+    return {
+      isChecked: false,
+      currentPageCheckedKeys: [],
+    };
+  }
+  const currentPageCheckedKeys = [];
+  visibleList.forEach((item) => {
+    if (checkedLabelKeys.includes(item.id)) {
+      currentPageCheckedKeys.push(item.id);
     }
-    const currentPageCheckedKeys = getCurrentPageCheckedKeys(
-        visibleList,
-        checkedLabelKeys
-    );
-    console.log("currentPageCheckedKeys", currentPageCheckedKeys);
-    if (currentPageCheckedKeys.length !== currentPageKeysLength) {
-        return false;
-    } else {
-        return currentPageKeys.every((key) => currentPageCheckedKeys.includes(key));
+  });
+  const isChecked = currentPageCheckedKeys.length === visibleList.length;
+  return {
+    isChecked,
+    currentPageCheckedKeys,
+  };
+}
+
+export function calcIfCurrentPageCheckedAllBySet(
+  visibleList,
+  checkedLabelKeys
+) {
+  const currentPageKeysLength = visibleList.length;
+  const checkedCount = checkedLabelKeys.size;
+  if (currentPageKeysLength === 0 || checkedCount === 0) {
+    return {
+      isChecked: false,
+      currentPageCheckedKeys: [],
+    };
+  }
+  const currentPageCheckedKeys = [];
+  visibleList.forEach((item) => {
+    if (checkedLabelKeys.has(item.id)) {
+      currentPageCheckedKeys.push(item.id);
     }
+  });
+  const isChecked = currentPageCheckedKeys.length === visibleList.length;
+  return {
+    isChecked,
+    currentPageCheckedKeys,
+  };
+}
+
+/**
+ * 判断是否勾选限制数量
+ * @param checkedLabelKeys
+ * @param maxLimitList
+ * @returns {{currentLimitCheckedKeys: *[], isChecked: boolean}|boolean}
+ */
+export function calcIfCheckLimit(checkedLabelKeys, maxLimitList) {
+  const checkedCount = checkedLabelKeys.length;
+  const maxLimitListLength = maxLimitList.length;
+  if (checkedCount === 0 || maxLimitListLength === 0) {
+    return false;
+  }
+  const currentLimitCheckedKeys = [];
+  for (let i = 0; i < maxLimitList.length; i++) {
+    const limit = maxLimitList[i];
+    if (checkedLabelKeys.includes(limit.id)) {
+      currentLimitCheckedKeys.push(limit.id);
+    }
+  }
+  const isCheckedLimit = currentLimitCheckedKeys.length === maxLimitListLength;
+  return {
+    isCheckedLimit,
+    currentLimitCheckedKeys,
+  };
+}
+
+export function calcIfCheckLimitBySet(checkedLabelKeys, maxLimitList) {
+  const checkedCount = checkedLabelKeys.size;
+  const maxLimitListLength = maxLimitList.length;
+  if (checkedCount === 0 || maxLimitListLength === 0) {
+    return false;
+  }
+  const currentLimitCheckedKeys = [];
+  for (let i = 0; i < maxLimitList.length; i++) {
+    const limit = maxLimitList[i];
+    if (checkedLabelKeys.has(limit.id)) {
+      currentLimitCheckedKeys.push(limit.id);
+    }
+  }
+  const isCheckedLimit = currentLimitCheckedKeys.length === maxLimitListLength;
+  return {
+    isCheckedLimit,
+    currentLimitCheckedKeys,
+  };
 }
 
 /**
@@ -135,10 +234,10 @@ export function calcIfCurrentPageCheckedAll(
  * @returns {{isCheckedAll: boolean, isIndeterminate: boolean}}
  */
 export function calcIfCheckedAll(allCheckedCount, filterLength) {
-    return {
-        isCheckedAll: allCheckedCount > 0 && allCheckedCount === filterLength,
-        isIndeterminate: allCheckedCount > 0 && allCheckedCount < filterLength,
-    };
+  return {
+    isCheckedAll: allCheckedCount > 0 && allCheckedCount === filterLength,
+    isIndeterminate: allCheckedCount > 0 && allCheckedCount < filterLength,
+  };
 }
 
 /**
@@ -148,5 +247,47 @@ export function calcIfCheckedAll(allCheckedCount, filterLength) {
  */
 
 export function difference(arr1, arr2) {
-    return Array.from(new Set(arr1.filter((item) => !arr2.includes(item))));
+  return Array.from(new Set(arr1.filter((item) => !arr2.includes(item))));
+}
+
+/**
+ * 计算当前页选中的keys
+ * @param currentPageKeys
+ * @param checkedLabelKeys
+ * @returns {*}
+ */
+export function calcCurrenPageCheckedKeys(currentPageKeys, checkedLabelKeys) {
+  const _currentPageKeys = currentPageKeys;
+  return checkedLabelKeys.filter((item) => _currentPageKeys.includes(item));
+}
+
+/**
+ * 获取当前页的keys
+ * @param visibleList
+ * @returns {*}
+ */
+export function getCurrentPageKeys(visibleList) {
+  return visibleList.map((item) => item?.id);
+}
+
+/**
+ * 数组差集 在set中的元素 但不在arr中
+ * @param checkedLabelKeysSet
+ * @param arr
+ * @returns {Set<any>}
+ */
+export function filterNotInSet(checkedLabelKeysSet, arr) {
+  // 将 data 转换为 Set，以提高查找效率
+  const dataSet = new Set(arr);
+
+  // 创建一个新的 Set 来存储过滤后的结果
+  const filteredSet = new Set();
+
+  // 遍历 checkedLabelKeysSet，过滤出不包含在 dataSet 中的元素
+  for (const item of checkedLabelKeysSet) {
+    if (!dataSet.has(item)) {
+      filteredSet.add(item);
+    }
+  }
+  return filteredSet;
 }
