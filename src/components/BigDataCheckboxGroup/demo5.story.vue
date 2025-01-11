@@ -1,9 +1,25 @@
 <template>
   <Story
     :layout="{ type: 'single' }"
-    title="BigDataCheckboxGroup/方案5-指定最大可选范围"
+    title="BigDataCheckboxGroup/方案5-全部在事件函数中处理"
   >
-    <Variant title="demo1">
+    <Variant title="全选">
+      <div class="opt-area">
+        <input v-model="listLength" type="number" />
+        <button @click="handleSetData">设置值</button>
+        <button @click="handleGetData">获取选中项</button>
+      </div>
+      <BigDataCheckboxGroup
+        ref="demo1Ref"
+        :dataSource="dataSource"
+        :item-component="ItemDemo"
+        itemKey="key"
+      >
+        <template #empty>空数据</template>
+      </BigDataCheckboxGroup>
+    </Variant>
+
+    <Variant title="指定最大可选范围">
       <div class="opt-area">
         <input v-model="listLength" type="number" />
         <button @click="handleSetData">设置值</button>
@@ -28,9 +44,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import BigDataCheckboxGroup from "./index5.vue";
 import { INIT_COUNT, mockBigData } from "./mockBigData.js";
 import ItemDemo from "./ItemDemo.vue";
+import BigDataCheckboxGroup from "./index5.vue";
 
 export default defineComponent({
   name: "demo1.story",
@@ -74,3 +90,5 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 </style>
+<docs lang="md" src="./README.md">
+</docs>

@@ -86,3 +86,6 @@ the `clean` command.
     - https://vueuse.org/
 - vee-validate@3
     - https://vee-validate.logaretm.com/v3
+
+- histoire
+    - https://histoire.dev/

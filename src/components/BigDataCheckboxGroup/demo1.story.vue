@@ -1,9 +1,9 @@
 <template>
   <Story
     :layout="{ type: 'single' }"
-    title="BigDataCheckboxGroup888/方案1-自定义item"
+    title="BigDataCheckboxGroup/方案1-全部使用计算属性"
   >
-    <Variant title="demo1">
+    <Variant title="自定义item">
       <template #default="{ state }">
         <div class="opt-area">
           <input v-model="listLength" type="number" />
@@ -20,11 +20,28 @@
         </bigDataDemo1>
       </template>
     </Variant>
+
+    <Variant title="限制最大数量">
+      <div class="opt-area">
+        <input v-model="listLength" type="number" />
+        <button @click="handleSetData">设置值</button>
+        <button @click="handleGetData">获取选中项</button>
+      </div>
+      <bigDataDemo1
+        ref="demo1Ref"
+        :dataSource="dataSource"
+        :item-component="ItemDemo"
+        :max-length="maxLength"
+        itemKey="key"
+        @emitUpMax="onUpMax"
+      >
+        <template #empty>空数据</template>
+      </bigDataDemo1>
+    </Variant>
   </Story>
 </template>
 
 <script>
-import { defineComponent } from "vue";
 import bigDataDemo1 from "./index.vue";
 import { INIT_COUNT, mockBigData } from "./mockBigData.js";
 import ItemDemo from "./ItemDemo.vue";
@@ -40,6 +57,10 @@ export default {
       dataSource: [],
       ItemDemo,
       listLength: INIT_COUNT,
+      // maxLength: 50,
+      maxLength: 100,
+      // maxLength: 150,
+      // maxLength: 1000,
     };
   },
   methods: {
@@ -53,6 +74,9 @@ export default {
       console.log("全部勾选的数据", list);
       console.log("半选状态", this.$refs.demo1Ref?.isIndeterminate);
     },
+    onUpMax() {
+      alert(`勾选数量达到最大值${this.maxLength}，禁止继续添加`);
+    },
   },
 };
 </script>
@@ -62,3 +86,6 @@ export default {
   margin-bottom: 10px;
 }
 </style>
+
+<docs lang="md" src="./README.md">
+</docs>

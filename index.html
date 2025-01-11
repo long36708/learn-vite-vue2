@@ -8,9 +8,25 @@
 		<meta http-equiv="Pragma" content="no-cache"/>
 		<meta http-equiv="Expires" content="0"/>
 		<title>Vite App</title>
+		<!-- PageSpy SDK -->
+		<script crossorigin="anonymous" src="http://192.168.216.1:6752/page-spy/index.min.js"></script>
+
+		<!-- 插件（非必须，但建议使用） -->
+		<script crossorigin="anonymous" src="http://192.168.216.1:6752/plugin/data-harbor/index.min.js"></script>
+		<script crossorigin="anonymous" src="http://192.168.216.1:6752/plugin/rrweb/index.min.js"></script>
 	</head>
 	<body>
 		<div id="app"></div>
 		<script type="module" src="/src/main.ts"></script>
 	</body>
+	<script>
+        window.$harbor = new DataHarborPlugin();
+        window.$rrweb = new RRWebPlugin();
+
+        [window.$harbor, window.$rrweb].forEach(p => {
+            PageSpy.registerPlugin(p)
+        })
+
+        window.$pageSpy = new PageSpy();
+	</script>
 </html>

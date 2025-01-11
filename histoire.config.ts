@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-05 10:53:10
+ * @LastEditTime: 2025-01-11 23:02:49
  * @FilePath: histoire.config.ts
  * @Description:
  */
@@ -17,4 +17,10 @@ export default defineConfig({
     "./src/**/*.story.vue",
   ],
   setupFile: "./histoire.setup.ts", // does not work
+  markdown: (md) => {
+    md.use(require("markdown-it-anchor").default);
+    md.use(require("markdown-it-table-of-contents"), {
+      includeLevel: [1, 2, 3, 4, 5],
+    });
+  },
 });
