@@ -1,43 +1,49 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 import bigDataDemo1 from "@/components/BigDataCheckboxGroup/index.vue";
-import {INIT_COUNT, mockBigData} from "@/components/Perf/mockBigData";
+import {
+  INIT_COUNT,
+  mockBigData,
+  normalizeList1,
+  normalizeList2,
+  normalizeList3,
+} from "@/components/Perf/mockBigData";
 
 export default defineComponent({
   name: "Array",
-  components: {bigDataDemo1},
+  components: { bigDataDemo1 },
   data() {
     return {
       listLength: INIT_COUNT,
       maxLength: 100,
       dataSource: [],
       ids: [],
-      keySet: new Set()
-    }
+      keySet: new Set(),
+    };
   },
   methods: {
     handleSetData() {
-      console.time('setData')
-      this.dataSource = mockBigData(this.listLength)
-      console.timeEnd('setData')
+      console.time("setData");
+      this.dataSource = mockBigData(this.listLength) as any;
+      console.timeEnd("setData");
     },
     handleTestFori() {
-      console.time('handleTestFori')
+      console.time("handleTestFori");
       const list = this.dataSource;
       // 检查 dataSource 是否存在且不为空
       if (!list || !Array.isArray(list)) {
         this.ids = [];
         return;
       }
-      const ids = []
+      const ids = [];
       for (let i = 0; i < list.length; i++) {
-        ids.push(list[i].key)
+        ids.push(list[i]?.key);
       }
-      this.ids = ids
-      console.timeEnd('handleTestFori')
+      this.ids = ids;
+      console.timeEnd("handleTestFori");
     },
     handleTestMap() {
-      console.time('handleTestMap')
+      console.time("handleTestMap");
       const list = this.dataSource;
 
       // 检查 dataSource 是否存在且不为空
@@ -47,85 +53,103 @@ export default defineComponent({
       }
 
       // 使用 map 方法简化代码
-      this.ids = list.map(item => item.key);
-      console.timeEnd('handleTestMap')
+      this.ids = list.map((item) => item.key) as any;
+      console.timeEnd("handleTestMap");
     },
     handleTestInclude() {
-      console.time('handleTestInclude')
+      console.time("handleTestInclude");
       if (!Array.isArray(this.ids) || this.ids.length === 0) {
-        console.warn('ids is not an array or is empty');
+        console.warn("ids is not an array or is empty");
         return;
       }
       const list = this.ids;
-      const isIn = list.includes(INIT_COUNT - 1)
-      console.log(isIn)
+      const isIn = list.includes(INIT_COUNT - 1);
+      console.log(isIn);
 
-      console.timeEnd('handleTestInclude')
+      console.timeEnd("handleTestInclude");
     },
     /**
      * 发现 has 方法比 includes 方法要快很多，但是中间转为set的时候很消耗性能
      */
     handleTestInitSethas() {
       // 确保 INIT_COUNT 已正确定义
-      console.time('handleTestSethas');
+      console.time("handleTestSethas");
       if (!Array.isArray(this.ids) || this.ids.length === 0) {
-        console.warn('ids is not an array or is empty');
+        console.warn("ids is not an array or is empty");
         return;
       }
-      console.time('转化为set')
+      console.time("转化为set");
       this.keySet = new Set(this.ids);
-      console.timeEnd('转化为set')
+      console.timeEnd("转化为set");
 
-      console.time('使用转化后的set has方法查找')
+      console.time("使用转化后的set has方法查找");
       const containsInitCount = this.keySet.has(INIT_COUNT - 1);
-      console.log(containsInitCount)
-      console.timeEnd('使用转化后的set has方法查找')
+      console.log(containsInitCount);
+      console.timeEnd("使用转化后的set has方法查找");
 
-      console.timeEnd('handleTestSethas');
+      console.timeEnd("handleTestSethas");
     },
     /**
      * 使用转化后的set has方法查找 比include 方法要快很多
      */
     handleTestSethas() {
-      console.time('使用转化后的set has方法查找')
+      console.time("使用转化后的set has方法查找");
       const containsInitCount = this.keySet.has(INIT_COUNT - 1);
-      console.log(containsInitCount)
-      console.timeEnd('使用转化后的set has方法查找')
+      console.log(containsInitCount);
+      console.timeEnd("使用转化后的set has方法查找");
     },
     /**
      * 转化为set 170ms 耗时比数组（100ms）慢
      */
-    handleTestInitSet(){
-      console.time('转化为set')
+    handleTestInitSet() {
+      console.time("转化为set");
       const list = this.dataSource;
       const ids = new Set();
       for (let i = 0; i < list.length; i++) {
-        ids.add(list[i].key)
+        ids.add(list[i].key);
       }
-      this.keySet = ids
-      console.timeEnd('转化为set')
+      this.keySet = ids;
+      console.timeEnd("转化为set");
     },
 
     /**
      *  100ms
      */
-    testSet2arr(){
-      console.time('testSet2arr')
+    testSet2arr() {
+      console.time("testSet2arr");
       const list = this.keySet;
       const arr = [...list];
-      console.log(arr)
-      console.timeEnd('testSet2arr')
-    }
+      console.log(arr);
+      console.timeEnd("testSet2arr");
+    },
 
+    testForiTransfer() {
+      console.time("testForiTransfer");
+      const list = this.dataSource;
+      normalizeList1(list, "key", "label");
+      console.timeEnd("testForiTransfer");
+    },
+    testMapTransfer() {
+      console.time("testMapTransfer");
+      const list = this.dataSource;
+      normalizeList2(list, "key", "label");
+      console.timeEnd("testMapTransfer");
+    },
+    testForITransfer() {
+      console.time("testForITransfer");
+      const list = this.dataSource;
+      normalizeList3(list, "key", "label");
+      console.timeEnd("testForITransfer");
+    },
   },
-})
+});
 </script>
 
 <template>
   <Story :layout="{ type: 'single' }" title="Vue中常用方法性能分析/数组方法">
-    <Variant title="demo1">
+    <Variant title="数组方法">
       <div class="opt-area">
-        <input v-model="listLength" type="number">
+        <input v-model="listLength" type="number" />
         <button @click="handleSetData">设置值</button>
         <button @click="handleTestFori">handleTestFori</button>
         <button @click="handleTestMap">handleTestMap</button>
@@ -134,12 +158,13 @@ export default defineComponent({
         <button @click="handleTestSethas">handleTestSethas</button>
         <button @click="handleTestInitSet">handleTestInitSet</button>
         <button @click="testSet2arr">testSet2arr</button>
+        <button @click="testForiTransfer">使用for-i转换</button>
+        <button @click="testMapTransfer">使用map转换</button>
+        <button @click="testForITransfer">使用fori转换但不进行浅拷贝</button>
         <span>dataSource 长度: {{ dataSource.length }}</span>
       </div>
     </Variant>
   </Story>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

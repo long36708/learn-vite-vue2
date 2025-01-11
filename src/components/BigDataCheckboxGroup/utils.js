@@ -19,6 +19,7 @@ export function normalizeList(
   if (!Array.isArray(dataSource) || dataSource.length === 0) {
     return [];
   }
+  if (ITEM_NAME === itemName && itemKey === ITEM_KEY) return dataSource;
   const list = [];
   for (let i = 0; i < dataSource.length; i++) {
     const item = dataSource[i];
