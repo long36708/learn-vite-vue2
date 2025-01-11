@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-10 21:45:59
+ * @LastEditTime: 2025-01-11 13:30:54
  * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
  * @Description:
  - 尽量避免使用watch,性能最优
@@ -29,13 +29,13 @@
       <!--      <el-button @click="handleReset">重置</el-button>-->
     </div>
     <div class="result-container">
-      <span class="text">已选：{{ checkedLabelKeys.size }} 项</span>
+      <span class="text">已选：{{ checkedLabelKeys.size ?? 0 }} 项</span>
       <span class="text"
         >当前页已选：{{ currentPageCheckedKeys.length }} 项</span
       >
       <span class="text">共搜索出：{{ filteredLabelList.length }} 项</span>
       <span v-show="shouldLimitChecked" class="text">
-        允许的最大勾选数量：{{ maxLength }}</span
+        当前允许的最大勾选数量：{{ currentPageMaxLength }}</span
       >
       <span class="text">全选框的状态：{{ isCheckedAll }}</span>
       <span class="text">全选框的半选状态：{{ isIndeterminate }}</span>
@@ -71,6 +71,7 @@
       <el-checkbox-group
         v-model="currentPageCheckedKeys"
         :max="currentPageMaxLength"
+        :disabled="disabledGroup"
         class="checkbox-group"
         @change="handleCheckedLabelChange"
       >
@@ -106,6 +107,7 @@
 
 <script>
 import {
+  calcCurrentPageMaxLength,
   calcIfCheckedAll,
   calcIfCheckLimitBySet,
   calcIfCurrentPageCheckedAllBySet,
@@ -187,6 +189,8 @@ export default {
       isCheckedLimit: false, // 是否全选前xxx条
       previousPageCheckedKeys: [], // 上一次当前页面选中的keys
       currentPageCheckedKeys: [], // 当前页选中的keys
+      currentPageMaxLength: undefined, // 默认不设置这个属性
+      disabledGroup: undefined,
     };
   },
   methods: {
@@ -221,7 +225,6 @@ export default {
       console.timeEnd("计算visibleList");
       this.visibleList = list;
       // todo
-
       const { isChecked, currentPageCheckedKeys } =
         calcIfCurrentPageCheckedAllBySet(list, this.checkedLabelKeys);
       this.isCurrentPageCheckedAll = isChecked;
@@ -230,6 +233,15 @@ export default {
       this.previousPageCheckedKeys = currentPageCheckedKeys;
       this.currentPageCheckedKeys = currentPageCheckedKeys;
       console.timeEnd("监听 visibleList 变化,计算上一次当前页勾选项");
+      const { isCheckedLimit, maxLength, checkedLabelKeys } = this;
+      if (!this.shouldLimitChecked) return;
+      this.currentPageMaxLength = calcCurrentPageMaxLength(
+        isCheckedLimit,
+        currentPageCheckedKeys,
+        maxLength,
+        checkedLabelKeys
+      );
+      this.disabledGroup = this.currentPageMaxLength === undefined;
     },
 
     handleCheckedItemChange(value) {
@@ -458,7 +470,7 @@ export default {
         this.checkedLabelKeys = new Set(checkedLabelKeysArr);
         // 点击选中前xxx条后是否跳到第一页待确认
         // this.currentPage = 1
-        this.isCheckedLimit = true;
+        // this.isCheckedLimit = true;
         // todo 判断全选当前页是否勾选
         const { isChecked, currentPageCheckedKeys } =
           calcIfCurrentPageCheckedAllBySet(
@@ -468,11 +480,26 @@ export default {
         this.isCurrentPageCheckedAll = isChecked;
         this.currentPageCheckedKeys = currentPageCheckedKeys;
       } else {
-        this.checkedLabelKeys = [];
+        this.checkedLabelKeys.clear();
         this.previousPageCheckedKeys = [];
         this.isCurrentPageCheckedAll = false;
         this.currentPageCheckedKeys = [];
       }
+      if (!this.shouldLimitChecked) return;
+      const {
+        isCheckedLimit,
+        maxLength,
+        checkedLabelKeys,
+        currentPageCheckedKeys,
+      } = this;
+
+      this.currentPageMaxLength = calcCurrentPageMaxLength(
+        isCheckedLimit,
+        currentPageCheckedKeys,
+        maxLength,
+        checkedLabelKeys
+      );
+      this.disabledGroup = this.currentPageMaxLength === undefined;
     },
   },
   computed: {
@@ -484,11 +511,6 @@ export default {
     },
     currentPageKeys() {
       return this.visibleList.map((item) => item?.id);
-    },
-    currentPageMaxLength() {
-      if (!this.shouldLimitChecked) return MAX_LENGTH;
-      // todo fix 当前页允许勾选的数量
-      return Math.min(this.maxLength, this.checkedLabelKeys.size);
     },
     hasVisibleData() {
       return this.visibleList.length > 0;

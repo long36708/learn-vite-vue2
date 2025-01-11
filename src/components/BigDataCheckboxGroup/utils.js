@@ -291,3 +291,37 @@ export function filterNotInSet(checkedLabelKeysSet, arr) {
   }
   return filteredSet;
 }
+
+/**
+ * 计算当前页允许勾选的数量
+ * TIP: 其实当前页允许勾选的数量，最大不能超过 当前页的数量和配置的最大允许勾选数量 中的最小值
+ * 不过这里简单处理了，不考虑当前页的数量
+ * @param isCheckedLimit
+ * @param currentPageCheckedKeys
+ * @param maxLength
+ * @param checkedLabelKeys
+ * @returns {number|undefined|*}
+ */
+export function calcCurrentPageMaxLength(
+  isCheckedLimit,
+  currentPageCheckedKeys,
+  maxLength,
+  checkedLabelKeys
+) {
+  // 若开启了限制,允许勾选的数量，就是当前选中的数量
+  if (isCheckedLimit) {
+    // 若当前页选中数量为0，则返回undefined，即使用disabled整页禁用
+    // 之所以不使用0，是因为max设置为0，样式会有bug，组件要求max必须大于0
+    return currentPageCheckedKeys.length || undefined;
+  }
+  // 无勾选时，允许勾选的数量，就是最大数量
+  if (checkedLabelKeys === 0) return maxLength;
+  // 计算除了当前页选中的keys，剩余已选中的keys
+  const remainingSelections = filterNotInSet(
+    checkedLabelKeys,
+    currentPageCheckedKeys
+  );
+
+  // 否则，允许勾选的数量，就是最大数量 - 剩余的数量
+  return maxLength - remainingSelections.size || undefined;
+}

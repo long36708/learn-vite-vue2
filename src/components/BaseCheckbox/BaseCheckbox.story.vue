@@ -1,12 +1,12 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-04 18:32:02
- * @LastEditTime: 2025-01-04 19:04:51
- * @FilePath: src/components/AImage/AImage.story.vue
+ * @LastEditTime: 2025-01-10 22:51:42
+ * @FilePath: src/components/BaseCheckbox/BaseCheckbox.story.vue
  * @Description:
  -->
 <script lang="ts" setup>
-import {reactive} from "vue";
+import { reactive } from "vue";
 import BaseCheckbox from "./index.vue";
 
 const initState = {
@@ -17,25 +17,25 @@ const initState = {
 const stateGlobal = reactive(initState);
 
 function initStateFn() {
-  return () => initState
+  return () => initState;
 }
 </script>
 
 <template>
   <Story
-      :layout="{
+    :layout="{
       type: 'grid',
-      width: 200,
-      height: 400,
     }"
-      title="BaseCheckbox 组件"
+    title="BaseCheckbox 组件"
   >
     <Variant icon="el:resize-full" title="全选半选">
-      <BaseCheckbox v-model="stateGlobal.isCheckedAll" :indeterminate="stateGlobal.isIndeterminate"/>
+      <BaseCheckbox
+        v-model="stateGlobal.isCheckedAll"
+        :indeterminate="stateGlobal.isIndeterminate"
+      />
       <template #controls>
-        <HstCheckbox v-model="stateGlobal.isCheckedAll" title="全选"/>
-        <HstCheckbox v-model="stateGlobal.isIndeterminate" title="半选 "/>
-
+        <HstCheckbox v-model="stateGlobal.isCheckedAll" title="全选" />
+        <HstCheckbox v-model="stateGlobal.isIndeterminate" title="半选 " />
       </template>
     </Variant>
   </Story>
