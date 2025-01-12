@@ -27,10 +27,14 @@ export function normalizeList(
       // 可以为0，但是不允许是 undefined
       console.error(`数据源中没有找到itemKey为${itemKey}的字段，请检查数据`);
     }
+    const name = item[itemName];
+    if (!name) {
+      console.error(`数据源中没有找到itemName为${itemName}的字段，请检查数据`);
+    }
     list.push({
       ...item,
       [ITEM_KEY]: item[itemKey],
-      [ITEM_NAME]: item[itemName],
+      [ITEM_NAME]: typeof name === "number" ? String(name) : name,
     });
   }
   return list;
