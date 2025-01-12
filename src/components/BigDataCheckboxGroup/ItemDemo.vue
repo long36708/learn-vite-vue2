@@ -14,7 +14,6 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ItemDemo",
-  inheritAttrs: false,
   props: {
     item: {
       type: Object,
@@ -22,7 +21,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    // console.log("item", this.item);
+    console.log("item", this.item);
   },
 });
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-12 12:41:52
+ * @LastEditTime: 2025-01-12 18:22:32
  * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
  * @Description:
  - 尽量避免使用watch,性能最优
@@ -123,7 +123,7 @@ import {
   MAX_LENGTH,
   normalizeList,
 } from "./utils.js";
-
+import CustomLabel from "./CustomLabel.vue";
 export default {
   name: "BigDataCheckboxGroup",
   inheritAttrs: false,
@@ -159,25 +159,7 @@ export default {
     },
   },
   components: {
-    CustomLabel: {
-      render(h) {
-        // console.log("CustomLabel", this.$attrs);
-        const { item, itemComponent } = this.$attrs;
-        if (itemComponent) {
-          return h(
-            itemComponent,
-            {
-              props: {
-                item,
-              },
-              inheritAttrs: false,
-            },
-            this.$slots.default
-          );
-        }
-        return h("span", item?.label, this.$slots.default);
-      },
-    },
+    CustomLabel,
   },
   data() {
     return {

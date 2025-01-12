@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-12 12:32:30
- * @LastEditTime: 2025-01-12 12:33:26
+ * @LastEditTime: 2025-01-12 18:45:58
  * @FilePath: src/views/BigDataDemo/demo5.vue
  * @Description:
  -->
@@ -56,12 +56,7 @@ export default defineComponent({
       <button @click="handleSetData">设置值</button>
       <button @click="handleGetData">获取选中项</button>
     </div>
-    <BigDataCheckboxGroup
-      ref="demo1Ref"
-      :dataSource="dataSource"
-      :item-component="ItemDemo"
-      itemKey="key"
-    >
+    <BigDataCheckboxGroup ref="demo1Ref" :dataSource="dataSource" itemKey="key">
       <template #empty>空数据</template>
     </BigDataCheckboxGroup>
   </div>

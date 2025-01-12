@@ -1,7 +1,7 @@
 export const ITEM_KEY = "id";
 export const ITEM_NAME = "label";
 
-export const EVENT_NAME_UP_MAX = "emitUpMax";
+export const EVENT_NAME_UP_MAX = Symbol("emitUpMax");
 export const MAX_LENGTH = Infinity;
 
 /**
