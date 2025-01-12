@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+// vue2貌似无法使用
+// 报错 vue.runtime.esm.js:3065 Error: [🍍]: "getActivePinia()" was called but there was no active Pinia. Are you trying to use a store before calling "app.use(pinia)"?
+import { logEvent } from "histoire/client";
+
 defineProps({
   color: {
     type: String,
@@ -21,6 +25,7 @@ defineProps({
   <button
     :disabled="disabled"
     class="btn"
+    @click="logEvent('click', $event)"
     :class="{
       [`btn-color-${color}`]: color,
       [`btn-size-${size}`]: size,

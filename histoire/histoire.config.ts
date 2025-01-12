@@ -1,20 +1,25 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-05 00:14:27
+ * @LastEditTime: 2025-01-12 09:57:28
  * @FilePath: histoire/histoire.config.ts
  * @Description:
  */
 import { defineConfig } from "histoire";
 import { HstVue } from "@histoire/plugin-vue2";
-
+import { HstScreenshot } from "@histoire/plugin-screenshot";
 const logo = "../public/favicon.ico";
 const favicon = "./favicon.ico";
 
 const env = process.env.HISTOIRE_ENV || "development";
 console.log("histoire %s", env);
 export default defineConfig({
-  plugins: [HstVue()],
+  plugins: [
+    HstVue(),
+    HstScreenshot({
+      ignored: ({ file }) => file.includes("tailwind-tokens"),
+    }),
+  ],
   storyMatch: [
     "../src/components/**/*.story.vue",
     // "../src/components/AButton/Button.story.vue",

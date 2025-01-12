@@ -1,53 +1,54 @@
 <script lang="ts" setup>
-import {reactive} from "vue";
+import { reactive } from "vue";
 import BaseButton from "./BaseButton.vue";
+// 这个方法需要使用 Pinia
+import { logEvent } from "histoire/client";
 
 const state = reactive({
   disabled: false,
   color: undefined,
   size: undefined,
 });
-
 </script>
 
 <template>
   <Story
-      :layout="{
+    :layout="{
       type: 'grid',
       width: 200,
     }"
-      title="BaseButton 基础按钮"
+    title="BaseButton 基础按钮"
   >
     <Variant title="游乐场">
       <template #default>
         <BaseButton
-            :color="state.color"
-            :disabled="state.disabled"
-            :size="state.size"
+          :color="state.color"
+          :disabled="state.disabled"
+          :size="state.size"
         >
           Click me
         </BaseButton>
       </template>
 
       <template #controls>
-        <HstCheckbox v-model="state.disabled" title="禁用"/>
+        <HstCheckbox v-model="state.disabled" title="禁用" />
         <HstSelect
-            v-model="state.color"
-            :options="[
+          v-model="state.color"
+          :options="[
             { value: undefined, label: 'Default' },
             { value: 'green', label: 'Green' },
             { value: 'red', label: 'Red' },
           ]"
-            title="颜色"
+          title="颜色"
         />
         <HstSelect
-            v-model="state.size"
-            :options="[
+          v-model="state.size"
+          :options="[
             { value: undefined, label: 'Default' },
             { value: 'small', label: 'Small' },
             { value: 'big', label: 'Big' },
           ]"
-            title="大小"
+          title="大小"
         />
       </template>
     </Variant>
@@ -57,7 +58,9 @@ const state = reactive({
     </Variant>
 
     <Variant icon-color="#F43F5E" title="小尺寸红色按钮">
-      <BaseButton color="red" size="small"> Click me!</BaseButton>
+      <BaseButton color="red" size="small" @click="logEvent('click', $event)">
+        Click me!
+      </BaseButton>
     </Variant>
     <!-- <Variant
       title="button inside div"
@@ -85,9 +88,9 @@ const state = reactive({
 
 ```vue
 <script lang="ts" setup>
-  defineProps<{
-    foo: string;
-  }>();
+defineProps<{
+  foo: string;
+}>();
 </script>
 
 <template>

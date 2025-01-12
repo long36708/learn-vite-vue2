@@ -14,10 +14,13 @@
   },
   "dependencies": {
     "vue": "2.7.16",
-    "vue-template-compiler": "^2.7.16"
+    "vue-template-compiler": "^2.7.16",
+    "pinia": "^2.0.16"
   },
   "devDependencies": {
     "@histoire/plugin-vue2": "^0.17.17",
+    "@histoire/plugin-screenshot": "^0.17.17",
+    "@histoire/vendors": "^0.17.17",
     "@unocss/reset": "0.64.1",
     "@vitejs/plugin-vue2": "2.3.3",
     "histoire": "0.17.17",
