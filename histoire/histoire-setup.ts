@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:17:25
- * @LastEditTime: 2025-01-12 10:42:21
+ * @LastEditTime: 2025-01-12 11:55:34
  * @FilePath: histoire/histoire-setup.ts
  * @Description:
  */
@@ -11,6 +11,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "./histoire.css";
 import { createPinia, PiniaVuePlugin } from "pinia";
+import { Icon } from "@iconify/vue";
 
 console.log("Theme loaded!");
 export const setupVue2 = defineSetupVue2(({ story, variant }) => {
@@ -19,7 +20,8 @@ export const setupVue2 = defineSetupVue2(({ story, variant }) => {
   Vue.use(PiniaVuePlugin);
   // Global component
   // Vue.component("GlobalComponent", MyGlobalComponent);
-
+  Vue.component("Icon", Icon);
+  console.log("注册全局组件");
   provide("demo", "meow");
   // App options
   return {
@@ -34,5 +36,8 @@ export const setupVue2 = defineSetupVue2(({ story, variant }) => {
     //     demo: "meow",
     //   };
     // },
+    mounted() {
+      console.log("defineSetupVue2", this);
+    },
   };
 });

@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-12 09:57:28
+ * @LastEditTime: 2025-01-12 11:48:30
  * @FilePath: histoire/histoire.config.ts
  * @Description:
  */

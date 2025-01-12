@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:17:25
- * @LastEditTime: 2025-01-11 15:22:31
+ * @LastEditTime: 2025-01-12 11:54:26
  * @FilePath: histoire.setup.ts
  * @Description:
  */
@@ -11,14 +11,16 @@ import Vue from "vue";
 // import router from "../src/router";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import { addCollection } from "@iconify/vue";
+import { Icon, addCollection } from "@iconify/vue";
 import carbon from "@iconify/json/json/carbon.json";
+
 export const setupVue2 = defineSetupVue2(({ story, variant }) => {
   // Vue plugin
 
   // Global component
   // Vue.component("GlobalComponent", MyGlobalComponent);
   Vue.use(ElementUI);
+  Vue.component("Icon", Icon);
   addCollection(carbon);
   // App options
   // return {
