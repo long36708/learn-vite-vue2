@@ -89,3 +89,23 @@ the `clean` command.
 
 - histoire
     - https://histoire.dev/
+
+## 组件封装技巧
+
+- 使用下划线开头标识是内部属性,例如 _pageSize
+- 父组件优先处理逻辑
+    - 通过先触发 `emit` 事件，可以让父组件有机会首先处理这个值的变化。父组件可能会根据新的值执行一些额外的逻辑或验证。
+    - 如果先更新本地状态，然后再触发事件，可能会导致组件内部的状态和父组件传递的状态不同步，尤其是在父组件有复杂的状态管理或验证逻辑时。
+    - 在 Vue 的双向绑定场景中（如 `v-model`），确保父组件的状态总是最先被更新，可以避免潜在的竞争条件和不一致问题。
+
+- 绑定属性和事件：
+    - functional 组件 v-bind="data.attrs" v-on="listeners"
+        - 通过v-bind="data.attrs"和v-on="listeners"将父组件传递的属性和事件绑定到根元素上
+        - 这里的 `data.attrs` 是由 Vue 的 functional 组件上下文提供的对象，包含了父组件传递的所有属性（props、class、style
+          等）。
+        - 通过这种方式，可以确保所有父组件传递的属性都能正确绑定到当前元素上。
+        - 因为 functional 组件没有实例，所以不能直接使用 `$attrs`
+    - 普通组件 v-bind="$attrs" v-on="$listeners"
+        - `$attrs` 是 Vue 提供的一个特殊变量，包含父组件传递的所有非 prop 属性（如 class、style、事件监听器等），但不包括
+          props。
+        - 它通常用于将这些属性传递给子组件或更深层次的组件。

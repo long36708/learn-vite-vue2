@@ -1,6 +1,6 @@
 <template>
   <Story
-    :layout="{ type: 'single' }"
+    :layout="{ type: 'single', iframe: true }"
     title="BigDataCheckboxGroup/方案5-全部在事件函数中处理"
   >
     <Variant title="全选">
@@ -49,7 +49,7 @@ import ItemDemo from "./ItemDemo.vue";
 import BigDataCheckboxGroup from "./index5.vue";
 
 export default defineComponent({
-  name: "demo1.story",
+  name: "demo5.story",
   components: {
     BigDataCheckboxGroup,
   },

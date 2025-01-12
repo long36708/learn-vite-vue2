@@ -14,6 +14,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ItemDemo",
+  inheritAttrs: false,
   props: {
     item: {
       type: Object,

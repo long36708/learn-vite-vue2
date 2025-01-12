@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-12 11:48:30
+ * @LastEditTime: 2025-01-12 12:08:21
  * @FilePath: histoire/histoire.config.ts
  * @Description:
  */
@@ -34,11 +34,16 @@ export default defineConfig({
       light: logo,
       dark: logo,
     },
-    // favicon: "./favicon.ico",
+    // favicon: "./favicon.ico", // 默认会找 public/favicon.ico
     // logoHref: "#",
   },
   vite: {
     base: env === "development" ? "/" : "/docs/",
+    server: {
+      fs: {
+        allow: ["../src"],
+      },
+    },
   },
   markdown: (md) => {
     md.use(require("markdown-it-anchor").default);

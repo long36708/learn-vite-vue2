@@ -1,7 +1,9 @@
 import Vue from "vue";
 import { createPinia, PiniaVuePlugin } from "pinia";
 
-import App from "./App.vue"; // import App from "./views/CountDemo.vue";
+// import App from "./App.vue";
+// import App from "./views/CountDemo.vue";
+import App from "./views/BigDataDemo/demo5.vue";
 import router from "@/router";
 import "@/plugins";
 import "./assets/main.css";

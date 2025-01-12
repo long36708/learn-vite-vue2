@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-11 13:30:54
+ * @LastEditTime: 2025-01-12 12:41:52
  * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
  * @Description:
  - 尽量避免使用watch,性能最优
@@ -10,7 +10,11 @@
  - 使用 set 作为选中项
  -->
 <template>
-  <div class="bigdata-checkbox-group-container">
+  <div
+    class="bigdata-checkbox-group-container"
+    :class="$attrs.class"
+    :style="$attrs.style"
+  >
     <div class="filter-container">
       <el-input
         v-model.trim="filterText"
@@ -122,6 +126,7 @@ import {
 
 export default {
   name: "BigDataCheckboxGroup",
+  inheritAttrs: false,
   props: {
     dataSource: {
       type: Array,
@@ -165,6 +170,7 @@ export default {
               props: {
                 item,
               },
+              inheritAttrs: false,
             },
             this.$slots.default
           );
