@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-12 18:22:32
+ * @LastEditTime: 2025-01-13 22:20:02
  * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
  * @Description:
  - 尽量避免使用watch,性能最优
@@ -11,20 +11,23 @@
  -->
 <template>
   <div
-    class="bigdata-checkbox-group-container"
+    class="aiop-bigdata-checkbox-group"
     :class="$attrs.class"
     :style="$attrs.style"
   >
-    <div class="filter-container">
+    <div
+      class="aiop-bigdata-checkbox-group__filter-container"
+      v-if="showSearch"
+    >
       <el-input
         v-model.trim="filterText"
-        class="search-input"
+        class="aiop-bigdata-checkbox-group__search-input"
         placeholder="请输入搜索内容"
         suffix-icon="h-icon-search"
         type="text"
       />
       <el-button
-        class="search-btn"
+        class="aiop-bigdata-checkbox-group__search-btn"
         type="primary"
         @click="handleSearch"
         @keyup.enter.native="handleSearch"
@@ -32,29 +35,46 @@
       </el-button>
       <!--      <el-button @click="handleReset">重置</el-button>-->
     </div>
-    <div class="result-container">
-      <span class="text">已选：{{ checkedLabelKeys.size ?? 0 }} 项</span>
-      <span class="text"
+    <div class="aiop-bigdata-checkbox-group__result-container">
+      <span class="aiop-bigdata-checkbox-group__text"
+        >已选：{{ checkedLabelKeys.size ?? 0 }} 项</span
+      >
+      <span class="aiop-bigdata-checkbox-group__text"
         >当前页已选：{{ currentPageCheckedKeys.length }} 项</span
       >
-      <span class="text">共搜索出：{{ filteredLabelList.length }} 项</span>
-      <span v-show="shouldLimitChecked" class="text">
+      <span class="aiop-bigdata-checkbox-group__text"
+        >共搜索出：{{ filteredLabelList.length }} 项</span
+      >
+      <!--      <span
+        v-show="shouldLimitChecked"
+        class="aiop-bigdata-checkbox-group__text"
+      >
         当前允许的最大勾选数量：{{ currentPageMaxLength }}</span
       >
-      <span class="text">全选框的状态：{{ isCheckedAll }}</span>
-      <span class="text">全选框的半选状态：{{ isIndeterminate }}</span>
-      <span class="text">全选当前页的状态：{{ isCurrentPageCheckedAll }} </span>
-      <span class="text"
-        >全选前{{ maxLength }}的状态：{{ isCheckedLimit }}
+      <span class="aiop-bigdata-checkbox-group__text"
+        >全选框的状态：{{ isCheckedAll }}</span
+      >
+      <span class="aiop-bigdata-checkbox-group__text"
+        >全选框的半选状态：{{ isIndeterminateAll }}</span
+      >
+      <span class="aiop-bigdata-checkbox-group__text"
+        >全选当前页的状态：{{ isCurrentPageCheckedAll }}
       </span>
+      <span class="aiop-bigdata-checkbox-group__text"
+        >全选前{{ maxLength }}的状态：{{ isCheckedLimit }}
+      </span>-->
     </div>
-    <div v-show="hasVisibleData" class="operate-container">
+    <div
+      v-show="hasVisibleData"
+      class="aiop-bigdata-checkbox-group__operate-container"
+    >
       <el-checkbox
         v-show="!shouldLimitChecked"
         v-model="isCheckedAll"
         :disabled="disableCheckAllBtn"
-        :indeterminate="isIndeterminate"
+        :indeterminate="isIndeterminateAll"
         @change="handleCheckedAllChange"
+        class="aiop-bigdata-checkbox-group__check-all"
       >
         全选
       </el-checkbox>
@@ -62,6 +82,7 @@
         v-model="isCurrentPageCheckedAll"
         :disabled="disableCheckAllCurrentPageBtn"
         @change="handleCheckedAllCurrentChange"
+        class="aiop-bigdata-checkbox-group__check-all-current-page"
       >
         全选当前页
       </el-checkbox>
@@ -69,6 +90,7 @@
         v-show="shouldLimitChecked"
         v-model="isCheckedLimit"
         @change="handleCheckedLimitChange"
+        class="aiop-bigdata-checkbox-group__check-limit"
       >
         全选前{{ maxLength }}项
       </el-checkbox>
@@ -76,29 +98,33 @@
         v-model="currentPageCheckedKeys"
         :max="currentPageMaxLength"
         :disabled="disabledGroup"
-        class="checkbox-group"
+        class="aiop-bigdata-checkbox-group__checkbox-group"
         @change="handleCheckedLabelChange"
       >
         <el-checkbox
           v-for="item in visibleList"
           :key="item.id"
           :label="item.id"
+          class="aiop-bigdata-checkbox-group__checkbox"
         >
-          <CustomLabel :item="item" :itemComponent="itemComponent" />
+          <custom-label :item="item" :itemComponent="itemComponent" />
         </el-checkbox>
       </el-checkbox-group>
     </div>
 
-    <div v-show="!hasVisibleData" class="operate-container empty-status">
+    <div
+      v-show="!hasVisibleData"
+      class="aiop-bigdata-checkbox-group__operate-container--empty-status"
+    >
       <slot name="empty">
-        <div class="empty">暂无数据 方案5</div>
+        <div class="aiop-bigdata-checkbox-group__empty">暂无数据 方案5</div>
         <!--      <h-empty>暂无数据</h-empty>-->
       </slot>
     </div>
-    <section class="pagination-wrap">
+    <section class="aiop-bigdata-checkbox-group__pagination-wrap">
       <el-pagination
         :current-page="currentPage"
-        :page-size="innerPageSize"
+        :page-size="pageSize"
         :page-sizes="pageSizes"
         :total="filteredLabelList.length"
         layout="sizes, prev, pager, next, jumper"
@@ -118,12 +144,15 @@ import {
   compare,
   EVENT_NAME_UP_MAX,
   filterNotInSet,
+  getKeysFromList,
   getLimitKeys,
   isEqualArray,
   MAX_LENGTH,
   normalizeList,
+  searchByLabel,
 } from "./utils.js";
 import CustomLabel from "./CustomLabel.vue";
+
 export default {
   name: "BigDataCheckboxGroup",
   inheritAttrs: false,
@@ -157,6 +186,10 @@ export default {
       type: Number,
       default: 100,
     },
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     CustomLabel,
@@ -170,9 +203,8 @@ export default {
       filteredLabelList: [],
       visibleList: [], // 当前页显示的数据
       currentPage: 1,
-      innerPageSize: 100,
       isCheckedAll: false, // 是否全选所有页面的checkbox
-      isIndeterminate: false, // 是否半选checkbox
+      isIndeterminateAll: false, // 是否半选checkbox
       isCurrentPageCheckedAll: false, // 是否全选当前页
       isCheckedLimit: false, // 是否全选前xxx条
       previousPageCheckedKeys: [], // 上一次当前页面选中的keys
@@ -190,15 +222,53 @@ export default {
       );
       console.timeEnd("设置数据");
       // todo 测试性能
-      // this.labelList.length = 10_000;
-      // this.labelList.length = 1_000;
-      // console.log("标准化后的labelList", this.labelList);
       // 清空之前的选中项
       this.checkedLabelKeys.clear();
       this.handleSearch();
     },
     getAllCheckedKeys() {
-      return this.checkedLabelKeys.slice();
+      return [...this.checkedLabelKeys];
+    },
+    setCheckedKeys(selectedKeys) {
+      this.checkedLabelKeys = new Set(selectedKeys);
+
+      const { isChecked, currentPageCheckedKeys } =
+        calcIfCurrentPageCheckedAllBySet(
+          this.visibleList,
+          this.checkedLabelKeys
+        );
+      this.isCurrentPageCheckedAll = isChecked;
+      this.currentPageCheckedKeys = currentPageCheckedKeys;
+      this.previousPageCheckedKeys = currentPageCheckedKeys;
+
+      // 判断是否限制
+      if (this.shouldLimitChecked) {
+        const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
+        const { isCheckedLimit } = calcIfCheckLimitBySet(
+          this.checkedLabelKeys,
+          maxLimitList
+        );
+        this.isCheckedLimit = isCheckedLimit;
+
+        // 计算当前页最大可勾选数量
+        const { maxLength, checkedLabelKeys } = this;
+
+        this.currentPageMaxLength = calcCurrentPageMaxLength(
+          isCheckedLimit,
+          currentPageCheckedKeys,
+          maxLength,
+          checkedLabelKeys
+        );
+        this.disabledGroup = this.currentPageMaxLength === undefined;
+      } else {
+        // 判断全选所有是否全选
+        const { isCheckedAll, isIndeterminateAll } = calcIfCheckedAll(
+          this.checkedLabelKeys.size,
+          this.filteredLabelList.length
+        );
+        this.isCheckedAll = isCheckedAll;
+        this.isIndeterminateAll = isIndeterminateAll;
+      }
     },
     // ----------- public method end -----------
 
@@ -207,12 +277,11 @@ export default {
      */
     getVisibleList() {
       console.time("计算visibleList");
-      const start = (this.currentPage - 1) * this.innerPageSize;
-      const end = this.currentPage * this.innerPageSize;
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = this.currentPage * this.pageSize;
       const list = this.filteredLabelList.slice(start, end);
       console.timeEnd("计算visibleList");
       this.visibleList = list;
-      // todo
       const { isChecked, currentPageCheckedKeys } =
         calcIfCurrentPageCheckedAllBySet(list, this.checkedLabelKeys);
       this.isCurrentPageCheckedAll = isChecked;
@@ -237,20 +306,14 @@ export default {
     },
     onSearch() {
       console.time("搜索数据");
-      const _labelList = this.labelList;
-      const _filterText = this.filterText;
-      this.filteredLabelList = _labelList.filter((item) => {
-        return item.label.includes(_filterText);
-      });
-      this.getVisibleList();
+      this.filteredLabelList = searchByLabel(this.labelList, this.filterText);
       console.timeEnd("搜索数据");
-      // console.log("filteredLabelList", this.filteredLabelList);
     },
     /**
      * 点击搜索按钮
      */
     handleSearch() {
-      // todo 先进行搜索，若搜索出的结果和上一次的一样，则不重置之前的勾选
+      // 先进行搜索，若搜索出的结果和上一次的一样，则不重置之前的勾选
       const lastFilteredLabelList = this.filteredLabelList;
       this.onSearch();
       const nextFilteredLabelList = this.filteredLabelList;
@@ -262,9 +325,11 @@ export default {
         }
       }
       this.isCheckedAll = false;
+      this.isIndeterminateAll = false;
       this.isCurrentPageCheckedAll = false;
       this.checkedLabelKeys.clear();
       this.currentPage = 1; // 重置页码
+      this.getVisibleList();
     },
     handleReset() {
       this.filterText = "";
@@ -275,7 +340,7 @@ export default {
      * @param size
      */
     handleSizeChange(size) {
-      this.innerPageSize = size;
+      this.pageSize = size;
       this.currentPage = 1;
       this.getVisibleList();
     },
@@ -296,12 +361,12 @@ export default {
       return true;
     },
     handleCheckedAllChange(value) {
-      this.isIndeterminate = false;
+      this.isIndeterminateAll = false;
       if (value) {
         console.log("开始全选");
         console.time("全选赋值");
         console.time("勾选全选-得到所有的ids");
-        let nextCheckedKeys = this.filteredLabelList.map((item) => item?.id);
+        let nextCheckedKeys = getKeysFromList(this.filteredLabelList);
         console.timeEnd("勾选全选-得到所有的ids");
         if (
           this.shouldLimitChecked &&
@@ -314,7 +379,7 @@ export default {
         }
         // todo 上方代码优化为set
         this.checkedLabelKeys = new Set(nextCheckedKeys);
-        const currentPageKeys = this.currentPageKeys;
+        const { currentPageKeys } = this;
         this.previousPageCheckedKeys = currentPageKeys;
         this.isCurrentPageCheckedAll = true;
         this.currentPageCheckedKeys = currentPageKeys;
@@ -332,7 +397,7 @@ export default {
       if (value) {
         // 勾选当前页
         console.log("勾选当前页", value);
-        const curKeys = this.visibleList.map((item) => item?.id);
+        const curKeys = this.currentPageKeys;
         if (curKeys.length > this.maxLength) {
           console.log(`可勾选数据量超过最大限制${this.maxLength}`);
           this.isCurrentPageCheckedAll = false;
@@ -350,21 +415,24 @@ export default {
         this.checkedLabelKeys = nextCheckedKeys;
         this.previousPageCheckedKeys = [...curKeys];
         this.currentPageCheckedKeys = curKeys;
-        // 判断全选所有是否全选
-        const { isCheckedAll, isIndeterminate } = calcIfCheckedAll(
-          this.checkedLabelKeys.size,
-          this.filteredLabelList.length
-        );
-        this.isCheckedAll = isCheckedAll;
-        this.isIndeterminate = isIndeterminate;
-        // todo 判断是否限制
-        if (!this.shouldLimitChecked) return;
-        const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
-        const { isCheckedLimit } = calcIfCheckLimitBySet(
-          this.checkedLabelKeys,
-          maxLimitList
-        );
-        this.isCheckedLimit = isCheckedLimit;
+
+        // 判断是否限制
+        if (this.shouldLimitChecked) {
+          const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
+          const { isCheckedLimit } = calcIfCheckLimitBySet(
+            this.checkedLabelKeys,
+            maxLimitList
+          );
+          this.isCheckedLimit = isCheckedLimit;
+        } else {
+          // 判断全选所有是否全选
+          const { isCheckedAll, isIndeterminateAll } = calcIfCheckedAll(
+            this.checkedLabelKeys.size,
+            this.filteredLabelList.length
+          );
+          this.isCheckedAll = isCheckedAll;
+          this.isIndeterminateAll = isIndeterminateAll;
+        }
       } else {
         console.log("取消勾选当前页");
         this.checkedLabelKeys = filterNotInSet(
@@ -373,21 +441,24 @@ export default {
         );
         this.previousPageCheckedKeys = [];
         this.currentPageCheckedKeys = [];
-        // 判断全选所有是否取消全选
-        const { isCheckedAll, isIndeterminate } = calcIfCheckedAll(
-          this.checkedLabelKeys.size,
-          this.filteredLabelList.length
-        );
-        this.isCheckedAll = isCheckedAll;
-        this.isIndeterminate = isIndeterminate;
-        // todo 判断是否限制
-        if (!this.shouldLimitChecked) return;
-        const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
-        const { isCheckedLimit } = calcIfCheckLimitBySet(
-          this.checkedLabelKeys,
-          maxLimitList
-        );
-        this.isCheckedLimit = isCheckedLimit;
+
+        // 判断是否限制
+        if (this.shouldLimitChecked) {
+          const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
+          const { isCheckedLimit } = calcIfCheckLimitBySet(
+            this.checkedLabelKeys,
+            maxLimitList
+          );
+          this.isCheckedLimit = isCheckedLimit;
+        } else {
+          // 判断全选所有是否取消全选
+          const { isCheckedAll, isIndeterminateAll } = calcIfCheckedAll(
+            this.checkedLabelKeys.size,
+            this.filteredLabelList.length
+          );
+          this.isCheckedAll = isCheckedAll;
+          this.isIndeterminateAll = isIndeterminateAll;
+        }
       }
     },
     handleCheckedLabelChange(value) {
@@ -414,7 +485,7 @@ export default {
         this.checkedLabelKeys = filterNotInSet(this.checkedLabelKeys, data);
       } else {
         // 当前页全部取消选中
-        const currentPageKeys = this.visibleList.map((item) => item?.id);
+        const currentPageKeys = this.currentPageKeys;
         this.checkedLabelKeys = filterNotInSet(
           this.checkedLabelKeys,
           currentPageKeys
@@ -422,26 +493,29 @@ export default {
       }
       // 放到后边，因为前面判断如果超出限制，则不赋值
       this.previousPageCheckedKeys = [...value];
-      // todo 判断是否取消全选本页和全选所有
-      const { isCheckedAll, isIndeterminate } = calcIfCheckedAll(
-        this.checkedLabelKeys.size,
-        this.filteredLabelList.length
-      );
-      this.isCheckedAll = isCheckedAll;
-      this.isIndeterminate = isIndeterminate;
+
       const { isChecked } = calcIfCurrentPageCheckedAllBySet(
         this.visibleList,
         this.checkedLabelKeys
       );
       this.isCurrentPageCheckedAll = isChecked;
-      // todo 判断是否达到最大限制数
-      if (!this.shouldLimitChecked) return;
-      const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
-      const { isCheckedLimit } = calcIfCheckLimitBySet(
-        this.checkedLabelKeys,
-        maxLimitList
-      );
-      this.isCheckedLimit = isCheckedLimit;
+      //  判断是否达到最大限制数
+      if (this.shouldLimitChecked) {
+        const maxLimitList = this.filteredLabelList.slice(0, this.maxLength);
+        const { isCheckedLimit } = calcIfCheckLimitBySet(
+          this.checkedLabelKeys,
+          maxLimitList
+        );
+        this.isCheckedLimit = isCheckedLimit;
+      } else {
+        //  判断是否取消全选本页和全选所有
+        const { isCheckedAll, isIndeterminateAll } = calcIfCheckedAll(
+          this.checkedLabelKeys.size,
+          this.filteredLabelList.length
+        );
+        this.isCheckedAll = isCheckedAll;
+        this.isIndeterminateAll = isIndeterminateAll;
+      }
     },
     handleCheckedLimitChange(value) {
       if (value) {
@@ -451,15 +525,11 @@ export default {
           maxLength
         );
 
-        const currentPageKeys = this.currentPageKeys;
-        this.previousPageCheckedKeys = checkedLabelKeysArr.filter((item) =>
-          currentPageKeys.includes(item)
-        );
         this.checkedLabelKeys = new Set(checkedLabelKeysArr);
         // 点击选中前xxx条后是否跳到第一页待确认
         // this.currentPage = 1
         // this.isCheckedLimit = true;
-        // todo 判断全选当前页是否勾选
+        // 判断全选当前页是否勾选
         const { isChecked, currentPageCheckedKeys } =
           calcIfCurrentPageCheckedAllBySet(
             this.visibleList,
@@ -467,6 +537,7 @@ export default {
           );
         this.isCurrentPageCheckedAll = isChecked;
         this.currentPageCheckedKeys = currentPageCheckedKeys;
+        this.previousPageCheckedKeys = currentPageCheckedKeys;
       } else {
         this.checkedLabelKeys.clear();
         this.previousPageCheckedKeys = [];
@@ -498,7 +569,7 @@ export default {
       );
     },
     currentPageKeys() {
-      return this.visibleList.map((item) => item?.id);
+      return getKeysFromList(this.visibleList);
     },
     hasVisibleData() {
       return this.visibleList.length > 0;
@@ -536,7 +607,7 @@ export default {
       }
       // 若开启了限制，只判断前几页允许勾选，超过限制的禁止
       if (this.isCheckedLimit) {
-        const pageNo = Math.floor(this.maxLength / this.innerPageSize);
+        const pageNo = Math.floor(this.maxLength / this.pageSize);
         if (this.currentPage > pageNo) {
           return true;
         }
@@ -560,53 +631,46 @@ export default {
     dataSource(newValue) {
       this.setData(newValue);
     },
-    pageSize(newValue) {
-      this.innerPageSize = newValue;
-      this.getVisibleList();
-    },
   },
 };
 </script>
 
 <style scoped>
-.bigdata-checkbox-group-container {
-}
-
-.search-input {
+.aiop-bigdata-checkbox-group__search-input {
   width: 200px;
 }
 
-.search-btn {
+.aiop-bigdata-checkbox-group__search-btn {
   margin: 0 16px;
 }
 
-.result-container {
+.aiop-bigdata-checkbox-group__result-container {
   margin: 16px 0;
 }
 
-.text {
+.aiop-bigdata-checkbox-group__text {
   margin-right: 16px;
 }
 
-.checkbox-group {
+.aiop-bigdata-checkbox-group__checkbox-group {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   overflow: scroll;
   max-height: 300px;
-  min-height: 100px;
+  min-height: 24px;
 }
 
-.pagination-wrap {
+.aiop-bigdata-checkbox-group__pagination-wrap {
   margin-top: 16px;
 }
 
-.operate-container {
+.aiop-bigdata-checkbox-group__operate-container {
   width: 100%;
   min-height: 100px;
 }
 
-.operate-container.empty-status {
+.aiop-bigdata-checkbox-group__operate-container--empty-status {
   display: flex;
   align-items: center;
   justify-content: center;

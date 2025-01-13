@@ -34,7 +34,7 @@ export function normalizeList(
     list.push({
       ...item,
       [ITEM_KEY]: item[itemKey],
-      [ITEM_NAME]: typeof name === "number" ? String(name) : name,
+      [ITEM_NAME]: typeof name !== "string" ? String(name) : name,
     });
   }
   return list;
@@ -241,7 +241,7 @@ export function calcIfCheckLimitBySet(checkedLabelKeys, maxLimitList) {
 export function calcIfCheckedAll(allCheckedCount, filterLength) {
   return {
     isCheckedAll: allCheckedCount > 0 && allCheckedCount === filterLength,
-    isIndeterminate: allCheckedCount > 0 && allCheckedCount < filterLength,
+    isIndeterminateAll: allCheckedCount > 0 && allCheckedCount < filterLength,
   };
 }
 
@@ -267,12 +267,16 @@ export function calcCurrenPageCheckedKeys(currentPageKeys, checkedLabelKeys) {
 }
 
 /**
- * 获取当前页的keys
+ * 获取传入list的keys
  * @param visibleList
  * @returns {*}
  */
-export function getCurrentPageKeys(visibleList) {
-  return visibleList.map((item) => item?.id);
+export function getKeysFromList(visibleList) {
+  const ids = [];
+  for (let i = 0; i < visibleList.length; i++) {
+    ids.push(visibleList[i]?.id);
+  }
+  return ids;
 }
 
 /**
@@ -329,4 +333,15 @@ export function calcCurrentPageMaxLength(
 
   // 否则，允许勾选的数量，就是最大数量 - 剩余的数量
   return maxLength - remainingSelections.size || undefined;
+}
+
+export function searchByLabel(labelList, _filterText) {
+  const list = [];
+  for (let i = 0; i < labelList.length; i++) {
+    const item = labelList[i];
+    if (item && item.label.includes(_filterText)) {
+      list.push(item);
+    }
+  }
+  return list;
 }
