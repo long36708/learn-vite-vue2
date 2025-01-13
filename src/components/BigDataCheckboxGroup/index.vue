@@ -163,7 +163,9 @@ export default {
     // ----------- public method start -----------
     setData(labelList) {
       console.time("标准化数据");
-      this.labelList = normalizeList(labelList, this.itemKey, this.itemName);
+      this.labelList = Object.freeze(
+        normalizeList(labelList, this.itemKey, this.itemName)
+      );
       console.timeEnd("标准化数据");
       // todo 测试性能
       // this.labelList.length = 10_000;
@@ -189,9 +191,11 @@ export default {
     onSearch() {
       const _labelList = this.labelList;
       const _filterText = this.filterText;
-      this.filteredLabelList = _labelList.filter((item) => {
-        return item.label.includes(_filterText);
-      });
+      this.filteredLabelList = Object.freeze(
+        _labelList.filter((item) => {
+          return item.label.includes(_filterText);
+        })
+      );
       // console.log("filteredLabelList", this.filteredLabelList);
     },
     handleSearch() {
@@ -209,6 +213,7 @@ export default {
       }
       this.isCheckedAll = false;
       this.isCurrentPageCheckedAll = false;
+      this.isCheckedLimit = false;
       this.checkedLabelKeys = [];
       this.currentPage = 1; // 重置页码
     },

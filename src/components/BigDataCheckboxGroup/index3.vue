@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:35:29
- * @LastEditTime: 2025-01-10 21:38:44
+ * @LastEditTime: 2025-01-13 23:57:04
  * @FilePath: src/components/BigDataCheckboxGroup/index3.vue
  * @Description:
  - 当前页的选中项，不再使用计算属性，而是直接从data中获取
@@ -241,9 +241,11 @@ export default {
       console.time("搜索数据");
       const _labelList = this.labelList;
       const _filterText = this.filterText;
-      this.filteredLabelList = _labelList.filter((item) => {
-        return item.label.includes(_filterText);
-      });
+      this.filteredLabelList = Object.freeze(
+        _labelList.filter((item) => {
+          return item.label.includes(_filterText);
+        })
+      );
       console.timeEnd("搜索数据");
       // console.log("filteredLabelList", this.filteredLabelList);
     },
@@ -262,6 +264,7 @@ export default {
       }
       this.isCheckedAll = false;
       this.isCurrentPageCheckedAll = false;
+      this.isCheckedLimit = false;
       this.checkedLabelKeys = [];
       this.currentPage = 1; // 重置页码
     },

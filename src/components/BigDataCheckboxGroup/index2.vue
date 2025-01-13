@@ -206,9 +206,11 @@ export default {
       console.time("搜索数据");
       const _labelList = this.labelList;
       const _filterText = this.filterText;
-      this.filteredLabelList = _labelList.filter((item) => {
-        return item.label.includes(_filterText);
-      });
+      this.filteredLabelList = Object.freeze(
+        _labelList.filter((item) => {
+          return item.label.includes(_filterText);
+        })
+      );
       console.timeEnd("搜索数据");
       // console.log("filteredLabelList", this.filteredLabelList);
     },
@@ -227,6 +229,7 @@ export default {
       }
       this.isCheckedAll = false;
       this.isCurrentPageCheckedAll = false;
+      this.isCheckedLimit = false;
       this.checkedLabelKeys = [];
       this.currentPage = 1; // 重置页码
     },
