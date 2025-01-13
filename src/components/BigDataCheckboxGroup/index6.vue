@@ -1,13 +1,9 @@
 <!--
  * @Author: longmo
- * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-13 23:22:09
- * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
- * @Description:
- - 尽量避免使用watch,性能最优
- - 尽量在事件中处理逻辑
- - 以及使用组件默认的v-modal由组件自身更改v-modal绑定的值，而非外部开发者进行修改
- - 使用 set 作为选中项
+ * @Date: 2025-01-13 22:24:05
+ * @LastEditTime: 2025-01-13 22:36:26
+ * @FilePath: src/components/BigDataCheckboxGroup/index6.vue
+ * @Description: 只记录触摸过的页面的勾选状态
  -->
 <template>
   <div
@@ -45,7 +41,7 @@
       <span class="aiop-bigdata-checkbox-group__text"
         >共搜索出：{{ filteredLabelList.length }} 项</span
       >
-      <!--      <span
+      <span
         v-show="shouldLimitChecked"
         class="aiop-bigdata-checkbox-group__text"
       >
@@ -62,7 +58,7 @@
       </span>
       <span class="aiop-bigdata-checkbox-group__text"
         >全选前{{ maxLength }}的状态：{{ isCheckedLimit }}
-      </span>-->
+      </span>
     </div>
     <div
       v-show="hasVisibleData"
@@ -86,14 +82,14 @@
       >
         全选当前页
       </el-checkbox>
-      <el-checkbox
+      <!--      <el-checkbox
         v-show="shouldLimitChecked"
         v-model="isCheckedLimit"
         @change="handleCheckedLimitChange"
         class="aiop-bigdata-checkbox-group__check-limit"
       >
         全选前{{ maxLength }}项
-      </el-checkbox>
+      </el-checkbox>-->
       <el-checkbox-group
         v-model="currentPageCheckedKeys"
         :max="currentPageMaxLength"
@@ -134,7 +130,6 @@
     </section>
   </div>
 </template>
-
 <script>
 import {
   calcCurrentPageMaxLength,
@@ -223,16 +218,8 @@ export default {
       console.timeEnd("设置数据");
       // todo 测试性能
       // 清空之前的选中项
-      // this.checkedLabelKeys.clear();
-      // this.handleSearch();
-      this.filteredLabelList = this.labelList;
-      this.isCheckedAll = false;
-      this.isIndeterminateAll = false;
-      this.isCurrentPageCheckedAll = false;
-      this.isCheckedLimit = false;
       this.checkedLabelKeys.clear();
-      this.currentPage = 1; // 重置页码
-      this.getVisibleList();
+      this.handleSearch();
     },
     getAllCheckedKeys() {
       return [...this.checkedLabelKeys];
@@ -314,9 +301,7 @@ export default {
     },
     onSearch() {
       console.time("搜索数据");
-      this.filteredLabelList = Object.freeze(
-        searchByLabel(this.labelList, this.filterText)
-      );
+      this.filteredLabelList = searchByLabel(this.labelList, this.filterText);
       console.timeEnd("搜索数据");
     },
     /**
@@ -337,7 +322,6 @@ export default {
       this.isCheckedAll = false;
       this.isIndeterminateAll = false;
       this.isCurrentPageCheckedAll = false;
-      this.isCheckedLimit = false;
       this.checkedLabelKeys.clear();
       this.currentPage = 1; // 重置页码
       this.getVisibleList();

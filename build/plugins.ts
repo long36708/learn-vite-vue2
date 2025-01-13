@@ -19,7 +19,7 @@ import Icons from 'unplugin-icons/vite'
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
- * @LastEditTime: 2025-01-05 13:33:16
+ * @LastEditTime: 2025-01-13 23:09:40
  * @FilePath: build/plugins.ts
  * @Description:
  */
@@ -107,9 +107,9 @@ export function definePlugins() {
          * Turbo Console
          * @link https://github.com/unplugin/unplugin-turbo-console
          */
-        TurboConsole({
-            extendedPathFileNames: ["index"],
-        }),
+        // TurboConsole({
+        //     extendedPathFileNames: ["index"],
+        // }),
 
         /**
          * A vite plugin that support commonjs to esm in vite

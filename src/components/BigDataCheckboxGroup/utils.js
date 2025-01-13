@@ -99,8 +99,14 @@ export function getLimitKeys(filteredLabelList, maxLength) {
  * 判断数组是否相等，不考虑顺序
  */
 export function isEqualArray(arr1, arr2) {
-  const arr1Str = arr1.sort().toString();
-  const arr2Str = arr2.sort().toString();
+  const arr1Str = arr1
+    .map((item) => item.id)
+    .sort()
+    .toString();
+  const arr2Str = arr2
+    .map((item) => item.id)
+    .sort()
+    .toString();
   return arr1Str === arr2Str;
 }
 
@@ -336,10 +342,14 @@ export function calcCurrentPageMaxLength(
 }
 
 export function searchByLabel(labelList, _filterText) {
+  const filterText = String(_filterText).trim();
+  if (filterText.trim() === "") {
+    return labelList;
+  }
   const list = [];
   for (let i = 0; i < labelList.length; i++) {
     const item = labelList[i];
-    if (item && item.label.includes(_filterText)) {
+    if (item && item.label.includes(filterText)) {
       list.push(item);
     }
   }
