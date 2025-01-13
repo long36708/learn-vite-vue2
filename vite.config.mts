@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig, type UserConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";

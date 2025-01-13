@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:17:25
- * @LastEditTime: 2025-01-12 11:55:34
+ * @LastEditTime: 2025-01-12 21:25:21
  * @FilePath: histoire/histoire-setup.ts
  * @Description:
  */
@@ -11,7 +11,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "./histoire.css";
 import { createPinia, PiniaVuePlugin } from "pinia";
-import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue2";
 
 console.log("Theme loaded!");
 export const setupVue2 = defineSetupVue2(({ story, variant }) => {

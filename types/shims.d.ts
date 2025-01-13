@@ -6,3 +6,4 @@
 /// <reference types="unplugin-info/client" />
 /// <reference types="histoire" />
 /// <reference types="@histoire/client" />
+/// <reference types="vitest/config" />

@@ -1,12 +1,12 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-12 10:50:56
- * @LastEditTime: 2025-01-12 11:54:45
+ * @LastEditTime: 2025-01-12 21:35:09
  * @FilePath: histoire/src/IconifyIcon.story.vue
  * @Description:
  -->
 <!--<script lang="ts">-->
-<!--import { Icon, addCollection } from "@iconify/vue";-->
+<!--import { Icon, addCollection } from "@iconify/vue2";-->
 <!--import simple from "@iconify/json/json/simple-line-icons.json";-->
 <!--import design from "@iconify/json/json/ant-design.json";-->
 <!--export default {-->
@@ -19,7 +19,7 @@
 <!--</script>-->
 
 <script setup lang="ts">
-import { addCollection, Icon } from "@iconify/vue";
+import { addCollection, Icon } from "@iconify/vue2";
 import simple from "@iconify/json/json/simple-line-icons.json";
 import design from "@iconify/json/json/ant-design.json";
 

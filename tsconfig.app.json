@@ -19,6 +19,9 @@
 	],
 	"compilerOptions": {
 		"composite": true,
+		"target": "ESNext",
+		"jsx": "preserve",
+		"lib": ["DOM", "ESNext"],
 		"baseUrl": ".",
 		"allowJs": true,
 //		 "moduleResolution": "Bundler", // 放开后vue-router等三方包无法识别
@@ -26,6 +29,16 @@
 			"@/*": [
 				"./src/*"
 			]
-		}
+		},
+		"resolveJsonModule": true,
+		"types": [],
+		"strict": true,
+		"strictNullChecks": true,
+		"noUnusedLocals": true,
+		"esModuleInterop": true,
+		"ignoreDeprecations": "5.0",
+		"forceConsistentCasingInFileNames": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true
 	}
 }
