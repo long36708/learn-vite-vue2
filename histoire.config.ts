@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-11 23:02:49
+ * @LastEditTime: 2025-01-14 10:36:25
  * @FilePath: histoire.config.ts
  * @Description:
  */
@@ -22,5 +22,10 @@ export default defineConfig({
     md.use(require("markdown-it-table-of-contents"), {
       includeLevel: [1, 2, 3, 4, 5],
     });
+  },
+  vite: {
+    server: {
+      host: true, // 或者  host: '0.0.0.0',
+    },
   },
 });

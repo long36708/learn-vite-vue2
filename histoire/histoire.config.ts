@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-12 12:08:21
+ * @LastEditTime: 2025-01-14 10:36:58
  * @FilePath: histoire/histoire.config.ts
  * @Description:
  */
@@ -43,6 +43,7 @@ export default defineConfig({
       fs: {
         allow: ["../src"],
       },
+      host: true, // 或者  host: '0.0.0.0',
     },
   },
   markdown: (md) => {
