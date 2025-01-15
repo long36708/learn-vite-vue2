@@ -109,3 +109,45 @@ the `clean` command.
         - `$attrs` 是 Vue 提供的一个特殊变量，包含父组件传递的所有非 prop 属性（如 class、style、事件监听器等），但不包括
           props。
         - 它通常用于将这些属性传递给子组件或更深层次的组件。
+
+- node_modules/histoire/dist/node/vite.js
+  line: 197
+
+```text
+    <script>
+   // Define global variable
+   IconifyProviders = {
+       // Empty prefix: overwrite default API provider configuration
+       '': {
+           // Use custom API first, use Iconify public API as backup
+           resources: [
+               'http://localhost:3000',
+               'https://api.iconify.design',
+           ],
+           // Wait for 1 second before switching API hosts
+           rotate: 1000,
+       },
+   };
+</script>
+```
+
+## 若是npm
+直接修改 histoire 的node_modules中的内容
+```shell
+npx patch-package histoire
+```
+生成 patch 文件，提交到远程
+在package.json中
+```json
+{
+	"scripts": {
+		"postinstall": "patch-package"
+	}
+}
+```
+### 若是pnpm
+先执行 `pnpm patch-package histoire@0.17.17`
+
+然后根据提示，修改 `node_modules/.pnpm/histoire@0.17.17/node_modules/histoire/dist/node/vite.js`
+
+最后执行 `pnpm patch-commit <path>`
