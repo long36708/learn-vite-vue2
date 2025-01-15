@@ -151,3 +151,27 @@ npx patch-package histoire
 然后根据提示，修改 `node_modules/.pnpm/histoire@0.17.17/node_modules/histoire/dist/node/vite.js`
 
 最后执行 `pnpm patch-commit <path>`
+
+```ts
+import {createHighlighter} from 'shiki'
+import {createOnigurumaEngine} from 'shiki/engine/oniguruma'
+
+const highlighter = await createHighlighter({
+    themes: ['dracula', 'one-dark-pro', 'github-dark', 'slack-dark'],
+    engine: createOnigurumaEngine(() => import('shiki/wasm')),
+});
+
+const md = new MarkdownIt({
+    highlight: (code, lang) => `<div class="htw-relative htw-not-prose __histoire-code"><div class="htw-absolute htw-top-0 htw-right-0 htw-text-xs htw-text-white/40">${lang}</div>${highlighter.codeToHtml(code, {
+        themes: {
+            light: 'github-light',
+            dark: 'github-dark',
+            dim: 'github-dimmed',
+        },
+        lang,
+    })}</div>`,
+    linkify: true,
+    html: true,
+    breaks: false,
+});
+```
