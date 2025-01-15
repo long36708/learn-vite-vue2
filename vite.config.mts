@@ -63,6 +63,15 @@ export default defineConfig(({ command, mode }): UserConfig => {
         "~": fileURLToPath(new URL("./node_modules", import.meta.url)),
       },
       extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+      api: "modern-compiler", // 使用了现代编译器 API 来处理 SCSS 文件，否则控制台会报错
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // additionalData: `@import "@/styles/variables.scss";`,
+          api: "modern-compiler", // 使用了现代编译器 API 来处理 SCSS 文件，否则控制台会报错
+        },
+      },
     },
     define: {
       __LM__VERSION__: JSON.stringify(version),

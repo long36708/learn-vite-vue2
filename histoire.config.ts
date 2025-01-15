@@ -1,7 +1,7 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-04 16:03:18
- * @LastEditTime: 2025-01-14 10:36:25
+ * @LastEditTime: 2025-01-15 20:27:54
  * @FilePath: histoire.config.ts
  * @Description:
  */
@@ -26,6 +26,14 @@ export default defineConfig({
   vite: {
     server: {
       host: true, // 或者  host: '0.0.0.0',
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // additionalData: `@import "@/styles/variables.scss";`,
+          api: "modern-compiler", // 使用了现代编译器 API 来处理 SCSS 文件，否则控制台会报错
+        },
+      },
     },
   },
 });

@@ -1,11 +1,31 @@
-<script setup lang="ts">
-import { Component, computed, useAttrs, useSlots } from "vue";
+<template>
+  <component
+    :is="itemComponent"
+    v-if="itemComponent"
+    v-bind="attrs"
+    :item="item"
+    class="aiop-custom-label__component"
+  >
+    <slot />
+  </component>
+  <div v-else class="aiop-custom-label__default" :title="item?.label">
+    {{ item?.label ?? "默认标签" }}
+  </div>
+</template>
+<script setup>
+import { computed, useAttrs, useSlots } from "vue"; // 定义组件的 props
 
 // 定义组件的 props
-const props = defineProps<{
-  item: Record<string, any>; // 使用更具体的类型定义替代 Object
-  itemComponent?: Component | null; // 确保正确导入 Component 类型
-}>();
+const props = defineProps({
+  itemComponent: {
+    type: Object,
+    default: null,
+  },
+  item: {
+    type: Object,
+    default: () => ({ label: "默认标签" }),
+  },
+});
 
 // 获取插槽内容
 const slots = useSlots();
@@ -26,22 +46,8 @@ const attrs = computed(() => ({
 // const defaultSlotContent = slots.default?.();
 </script>
 
-<template>
-  <component
-    :is="itemComponent"
-    v-if="itemComponent"
-    v-bind="attrs"
-    :item="item"
-  >
-    <slot />
-  </component>
-  <div v-else class="custom-label" :title="item?.label">
-    {{ item?.label ?? "默认标签" }}
-  </div>
-</template>
-
 <style scoped>
-.custom-label {
+.aiop-custom-label__default {
   display: inline-block;
   max-width: 200px;
   white-space: nowrap;
