@@ -1,0 +1,26 @@
+diff --git a/dist/node/vite.js b/dist/node/vite.js
+index e2ec93dfb7431e32425fac8b0ac2e45042f51b42..03009e9441a0b470ebf67c78439bea3811bdb9b0 100644
+--- a/dist/node/vite.js
++++ b/dist/node/vite.js
+@@ -195,6 +195,21 @@ export async function getViteConfigWithPlugins(isServer, ctx) {
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width,initial-scale=1">
+     <meta name="description" content="">
++        <script>
++   // Define global variable
++   IconifyProviders = {
++       // Empty prefix: overwrite default API provider configuration
++       '': {
++           // Use custom API first, use Iconify public API as backup
++           resources: [
++               'http://localhost:3000',
++               'https://api.iconify.design',
++           ],
++           // Wait for 1 second before switching API hosts
++           rotate: 1000,
++       },
++   };
++</script>
+     ${ctx.config.theme?.favicon ? `<link rel="icon" type="${lookupMime(ctx.config.theme.favicon)}" href="${server.config.base}${ctx.config.theme.favicon}"/>` : ''}
+   </head>
+   <body>
