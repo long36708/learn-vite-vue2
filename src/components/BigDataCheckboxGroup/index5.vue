@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-10 21:32:48
- * @LastEditTime: 2025-01-13 23:22:09
+ * @LastEditTime: 2025-01-19 22:59:24
  * @FilePath: src/components/BigDataCheckboxGroup/index5.vue
  * @Description:
  - 尽量避免使用watch,性能最优
@@ -492,7 +492,7 @@ export default {
           this.checkedLabelKeys = nextCheckedKeys;
         }
       } else if (type === "del") {
-        console.log("取消选中");
+        // console.log("取消选中");
         this.checkedLabelKeys = filterNotInSet(this.checkedLabelKeys, data);
       } else {
         // 当前页全部取消选中
@@ -585,6 +585,7 @@ export default {
     hasVisibleData() {
       return this.visibleList.length > 0;
     },
+
     /**
      * 是否全选按钮禁用
      * 当没有数据时，禁用全选按钮

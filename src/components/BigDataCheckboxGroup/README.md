@@ -1,5 +1,24 @@
 [[toc]]
 
+```ts colorize-brackets
+// [!code highlight:3]
+export const INIT_COUNT = 1_000_000;
+// export const INIT_COUNT = 2_000_000;
+export const mockBigData = (count: number) => {
+    // [!code word:count]
+    // const count = 1_000_000;
+    // const count = 250;
+    // const count = 250_000;
+    const data = []; // [!code highlight]
+    for (let i = 0; i < count; i++) {
+        data.push({
+            key: i, // [!code --]
+            label: `标签${i}`, // [!code ++]
+        });
+    }
+    return data; // [!code focus]
+};
+```
 # 复选框组
 
 - 若搜索出的结果为0
