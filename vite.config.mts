@@ -129,6 +129,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     test: {
       include: ["tests/**/*.test.ts", "*/**/__tests__/**/*.ts"],
       environment: "jsdom",
+      globals: true, // 使用类似 jest 中的全局 API
     },
   };
   return config as UserConfig;

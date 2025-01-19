@@ -86,7 +86,7 @@
 		"vite-plugin-require-transform": "^1.0.21",
 		"vite-plugin-vue-meta-layouts": "^0.5.1",
 		"vite-tsconfig-paths": "^5.1.4",
-		"vitest": "^2.1.8",
+		"vitest": "^3.0.1",
 		"vue-template-compiler": "^2.7.16",
 		"vue-tsc": "^0.38.8"
 	},
