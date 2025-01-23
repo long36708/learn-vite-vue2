@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<PropsType>(), {
 
 const imgSrc = useAssetsImageURL(props.name, { extension: props.extension });
 
-console.log(imgSrc);
+// console.log(imgSrc);
 </script>
 
 <template>

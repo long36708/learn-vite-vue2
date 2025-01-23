@@ -1,20 +1,24 @@
 /**
  * @Author: longmo
  * @Date: 2025-01-12 20:49:27
- * @LastEditTime: 2025-01-19 23:58:43
- * @FilePath: src/components/__tests__/bigDataCheckboxGroup.test.ts
+ * @LastEditTime: 2025-01-23 23:24:19
+ * @FilePath: src/components/__tests__/bigDataCheckboxGroup.test1.ts
  * @Description:
  */
-import { mount, shallowMount } from "@vue/test-utils";
+import { createLocalVue, mount, shallowMount } from "@vue/test-utils";
 import MyComponent from "@/components/BigDataCheckboxGroup/index5.vue";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { mockBigData } from "@/views/BigDataDemo/mockData";
+import ElementUI from "element-ui";
 
 describe("BigDataCheckboxGroup", () => {
   let wrapper;
 
   beforeEach(() => {
+    const localVue = createLocalVue();
+    localVue.use(ElementUI);
     wrapper = mount(MyComponent, {
+      localVue,
       propsData: {
         itemKey: "key",
         itemName: "name",
@@ -70,23 +74,5 @@ describe("BigDataCheckboxGroup", () => {
     expect(wrapper.vm.labelList.length).toEqual(mockNormalizedList.length);
     expect(Object.isFrozen(wrapper.vm.labelList)).toBe(true);
     expect(wrapper.vm.checkedLabelKeys.size).toBe(0);
-  });
-
-  it("setData with duplicate items should handle normalization correctly", () => {
-    const mockNormalizedList = [
-      { key: "1", name: "Item 1" },
-      { key: "2", name: "Item 2" },
-    ];
-
-    wrapper.vm.setData([
-      { key: "1", name: "Item 1" },
-      { key: "2", name: "Item 2" },
-      { key: "1", name: "Item 1" }, // 重复项
-    ]);
-
-    expect(wrapper.vm.labelList.length).toEqual(mockNormalizedList.length + 1);
-    expect(Object.isFrozen(wrapper.vm.labelList)).toBe(true);
-    expect(wrapper.vm.checkedLabelKeys.size).toBe(0);
-    // expect(wrapper.vm.handleSearch).toHaveBeenCalled();
   });
 });

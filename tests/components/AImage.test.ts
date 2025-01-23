@@ -10,6 +10,6 @@ describe("AImage", () => {
     });
     // expect(wrapper.attributes("src")).toContain("logo.svg");
     expect(wrapper.attributes("src")).toContain("composables");
-    console.log(wrapper.attributes("src"));
+    // console.log(wrapper.attributes("src"));
   });
 });
