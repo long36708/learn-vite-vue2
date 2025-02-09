@@ -1,6 +1,7 @@
 {
 	"name": "learn-vite-vue2",
 	"version": "0.0.1",
+	"type": "module",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"dev": "vite --force",
@@ -87,7 +88,6 @@
 		"vite-plugin-vue-meta-layouts": "^0.5.1",
 		"vite-tsconfig-paths": "^5.1.4",
 		"vitest": "^3.0.1",
-		"vue-template-compiler": "^2.7.16",
 		"vue-tsc": "^0.38.8"
 	},
 	"volta": {
@@ -96,6 +96,9 @@
 	"pnpm": {
 		"patchedDependencies": {
 			"histoire@0.17.17": "patches/histoire@0.17.17.patch"
+		},
+		"overrides": {
+			"@vue/compiler-sfc": "^2.7.16"
 		}
 	}
 }

@@ -4,9 +4,9 @@ import HomeView from "../views/HomeView.vue";
 import { setupLayouts } from "virtual:meta-layouts";
 
 Vue.use(VueRouter);
-import { routes as autoRoutes } from "vue-router/auto-routes";
+// import { routes as autoRoutes } from "vue-router/auto-routes";
 
-console.log("autoRoutes", autoRoutes);
+// console.log("autoRoutes", autoRoutes);
 const routes = [
   {
     path: "/",
