@@ -1,7 +1,7 @@
 <!--
  * @Author: longmo
  * @Date: 2025-01-13 23:58:23
- * @LastEditTime: 2025-01-14 00:19:26
+ * @LastEditTime: 2025-04-19 12:57:08
  * @FilePath: src/components/Perf/Search.story.vue
  * @Description: 这个文件 在 histoire 中使用会超出最大限制，有时间可以排查一下
  -->
@@ -49,3 +49,6 @@ const testIndexOf = () => {
 </template>
 
 <style scoped></style>
+<docs lang="md" src="./README.md">
+
+</docs>

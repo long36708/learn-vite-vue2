@@ -5,9 +5,7 @@ import vue2 from "@vitejs/plugin-vue2";
 import vue2Jsx from "@vitejs/plugin-vue2-jsx";
 import legacy from "@vitejs/plugin-legacy";
 import Compression from "unplugin-compression/vite";
-import UnpluginSvgComponent from "unplugin-svg-component/vite";
 import {codeInspectorPlugin} from "code-inspector-plugin";
-import TurboConsole from "unplugin-turbo-console/vite";
 import {viteCommonjs} from "@originjs/vite-plugin-commonjs";
 import requireTransform from "vite-plugin-require-transform";
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -16,13 +14,13 @@ import {webUpdateNotice} from '@plugin-web-update-notification/vite'
 // import VueRouter from 'unplugin-vue-router/vite' // @vue-macros/common
 import MetaLayouts from 'vite-plugin-vue-meta-layouts'
 import Icons from 'unplugin-icons/vite'
-
-import { FileSystemIconLoader } from 'unplugin-icons/loaders';
+import {FileSystemIconLoader} from 'unplugin-icons/loaders';
 import {promises as fs} from "fs";
+
 /**
  * @Author: longmo
  * @Date: 2025-01-04 12:11:37
- * @LastEditTime: 2025-02-09 14:10:40
+ * @LastEditTime: 2025-02-24 10:36:36
  * @FilePath: build/plugins.ts
  * @Description:
  */
@@ -68,7 +66,6 @@ export function definePlugins() {
             targets: ["ie >= 11"],
             additionalLegacyPolyfills: ["regenerator-runtime/runtime"], // 添加 polyfill
         }),
-
         /**
          * compress assets
          * @link https://github.com/vbenjs/vite-plugin-compression
@@ -121,7 +118,7 @@ export function definePlugins() {
         viteCommonjs(),
 
         /**
-         * Transform require to import
+         * Transform require to import 让vite支持require
          * @link https://github.com/WarrenJones/vite-plugin-require-transform
          */
         requireTransform({fileRegex: /.ts$|.vue$|.png$|.tsx$|.jpg$/}),
@@ -154,8 +151,7 @@ export function definePlugins() {
             compiler: 'vue3',
             // autoInstall: true,
             customCollections: {
-                'my-yet-other-icons': FileSystemIconLoader(getFilePath('./assets/svgIcons/my-yet-other-icons'), (svg) =>
-                    {
+                'my-yet-other-icons': FileSystemIconLoader(getFilePath('./assets/svgIcons/my-yet-other-icons'), (svg) => {
                         return svg.replace(/^<svg /, '<svg fill="currentColor" ')
                     }
                 ),
